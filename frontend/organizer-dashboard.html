@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizer Dashboard | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Left Sidebar (Panel 5) -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-text">EventHub</div>
+          <div class="sidebar-brand-subtitle">Organizer Operations &bull; KCT</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Navigation</div>
+        <a class="sidebar-link active" href="organizer-dashboard.html">
+          <span class="nav-icon"><i class="fas fa-chart-line"></i></span>
+          <span>Dashboard</span>
+        </a>
+        <a class="sidebar-link" href="event-approvals.html">
+          <span class="nav-icon"><i class="fas fa-stamp"></i></span>
+          <span>Event Approvals</span>
+          <span class="sidebar-badge" id="pending-badge-count" style="display: none;">0</span>
+        </a>
+        <a class="sidebar-link" href="attendance.html">
+          <span class="nav-icon"><i class="fas fa-camera"></i></span>
+          <span>Attendance Scanner</span>
+        </a>
+        <a class="sidebar-link" href="participants.html">
+          <span class="nav-icon"><i class="fas fa-users"></i></span>
+          <span>Participants</span>
+        </a>
+        <a class="sidebar-link" href="events.html">
+          <span class="nav-icon"><i class="fas fa-calendar-days"></i></span>
+          <span>Events Catalog</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">Actions</div>
+        <a class="sidebar-link" onclick="openCreateModal()">
+          <span class="nav-icon"><i class="fas fa-plus-circle"></i></span>
+          <span>Create Event</span>
+        </a>
+        <div class="nav-section-title" id="admin-section-title" style="margin-top: 1rem; display: none;">Administration</div>
+        <a class="sidebar-link" href="admin-dashboard.html" id="link-admin-panel" style="display: none; background: rgba(109, 40, 217, 0.2); color: #c4b5fd;">
+          <span class="nav-icon"><i class="fas fa-user-shield"></i></span>
+          <span>Admin Console</span>
+        </a>
+        <a class="sidebar-link" onclick="logoutUser()" style="color: #fca5a5;">
+          <span class="nav-icon"><i class="fas fa-right-from-bracket"></i></span>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar-circle" style="background: #5b21b6; border-color: #7c3aed;">
+          <i class="fas fa-user-tie"></i>
+        </div>
+        <div class="user-profile-meta">
+          <div class="user-profile-name" id="sidebar-org-name">EventHub Organizer</div>
+          <div class="user-profile-role">KCT Faculty Coordinator</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-wrap">
+          <h1>Organizer Operations Dashboard</h1>
+          <p>Real-time participant check-ins, event evaluations, and verified attendance metrics</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <a href="attendance.html" class="btn btn-primary btn-sm">
+            <i class="fas fa-qrcode" style="margin-right: 4px;"></i> Open Scanner
+          </a>
+          <button onclick="openCreateModal()" class="btn btn-outline btn-sm">
+            <i class="fas fa-plus" style="margin-right: 4px;"></i> New Event
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- 4 Metric Stat Cards -->
+        <div class="stats-overview-grid">
+          <div class="metric-stat-card">
+            <div class="metric-icon-box purple">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="stat-total-events">-</h3>
+              <p>Total Events</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box blue">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="stat-total-registrations">-</h3>
+              <p>Total Registered</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box green">
+              <i class="fas fa-circle-check"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="stat-total-present">-</h3>
+              <p>Verified Present</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box amber">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="stat-attendance-rate">-%</h3>
+              <p>Attendance Rate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Approvals Alert Strip -->
+        <div id="pending-approvals-alert-strip" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-triangle-exclamation" style="color: #d97706; font-size: 1.25rem;"></i>
+            <div>
+              <strong style="color: #92400e; font-size: 0.95rem;">Pending Event Submissions Awaiting Evaluation</strong>
+              <p style="color: #b45309; font-size: 0.82rem; margin: 0;">Student and faculty proposals require review before appearing on the public catalog.</p>
+            </div>
+          </div>
+          <a href="event-approvals.html" class="btn btn-sm btn-primary" style="background: #d97706; border-color: #d97706;">Review Proposals &rarr;</a>
+        </div>
+
+        <!-- Managed Events Table -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem; border-radius: 14px;">
+          <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <h2 style="font-size: 1.25rem; color: #1e1b4b; margin-bottom: 0.2rem;">Managed College Events</h2>
+              <p style="font-size: 0.85rem; color: #64748b;">Live seat occupancies, check-in totals, and report downloads</p>
+            </div>
+            <button onclick="loadDashboardData()" class="btn btn-outline btn-sm">
+              <i class="fas fa-rotate"></i> Refresh
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                  <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Event Name</th>
+                  <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Date &amp; Venue</th>
+                  <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Status</th>
+                  <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Registered</th>
+                  <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Present</th>
+                  <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Rate</th>
+                  <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.78rem; text-transform: uppercase; color: #64748b;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-events-body">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right: 6px;"></i> Loading events data...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Department & Academic Year Analytics Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Department Breakdown Card -->
+          <div class="card" style="border-radius: 14px; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="font-size: 1.1rem; color: #1e1b4b; margin: 0;">
+                <i class="fas fa-building-columns" style="color: #6d28d9; margin-right: 6px;"></i> Department Turnout
+              </h3>
+              <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Verified Attendance</span>
+            </div>
+            <div id="analytics-department-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <p style="color: #64748b; text-align: center; padding: 1rem;">Loading department analytics...</p>
+            </div>
+          </div>
+
+          <!-- Academic Year Distribution Card -->
+          <div class="card" style="border-radius: 14px; padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="font-size: 1.1rem; color: #1e1b4b; margin: 0;">
+                <i class="fas fa-user-graduate" style="color: #6d28d9; margin-right: 6px;"></i> Academic Year Distribution
+              </h3>
+              <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Batch Ratios</span>
+            </div>
+            <div id="analytics-year-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem;">
+              <p style="color: #64748b; text-align: center; padding: 1rem; grid-column: 1 / -1;">Loading year distribution...</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Live Check-in Activity Stream -->
+        <div class="card" style="border-radius: 14px; padding: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div>
+                <h3 style="font-size: 1.15rem; color: #1e1b4b; margin: 0;">Recent Verified Attendance Check-ins</h3>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 2px 0 0;">Real-time feed of students checked in with College Roll Number passes</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span id="live-stream-badge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 9999px;">
+                <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                LIVE GATE FEED
+              </span>
+              <a href="attendance.html" class="btn btn-outline btn-sm">Scan QR Pass</a>
+            </div>
+          </div>
+          <div id="dashboard-recent-checkins">
+            <p style="color: #64748b; text-align: center; padding: 1.5rem;">Loading check-in stream...</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Event Modal -->
+  <div class="modal-backdrop" id="create-event-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 600px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="color: #1e1b4b; font-size: 1.3rem;">Create New Campus Event</h3>
+        <button onclick="closeCreateModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <form id="create-event-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-name">Event Title <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="evt-name" class="form-control" placeholder="e.g. AI & Machine Learning Workshop" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="evt-category">Category <span style="color: #ef4444;">*</span></label>
+            <select id="evt-category" class="form-control" required>
+              <option value="Technical">Technical</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Cultural">Cultural</option>
+              <option value="Sports">Sports</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="evt-capacity">Capacity <span style="color: #ef4444;">*</span></label>
+            <input type="number" id="evt-capacity" class="form-control" value="150" min="1" max="1000" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="evt-date">Date <span style="color: #ef4444;">*</span></label>
+            <input type="date" id="evt-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="evt-time">Time</label>
+            <input type="text" id="evt-time" class="form-control" value="09:30 AM - 04:30 PM">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-venue">Venue <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="evt-venue" class="form-control" placeholder="e.g. Ramanujan Block Mech Lab 2" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-description">Description</label>
+          <textarea id="evt-description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCreateModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Submit Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Event Feedback & Satisfaction Analytics Modal -->
+  <div class="modal-backdrop" id="event-feedback-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 680px; max-height: 90vh; display: flex; flex-direction: column; padding: 2rem; border-radius: 16px; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="color: #1e1b4b; font-size: 1.25rem; margin-bottom: 2px;">
+            <i class="fas fa-star" style="color: #f59e0b; margin-right: 6px;"></i> Attendee Feedback &amp; Sentiment
+          </h3>
+          <p style="font-size: 0.82rem; color: #64748b; margin: 0;" id="feedback-analytics-event-title">Event Name</p>
+        </div>
+        <button onclick="closeEventFeedbackAnalyticsModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <!-- Metrics Cards Grid -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.85rem; margin-bottom: 1.25rem;">
+        <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #854d0e; font-weight: 700;">Overall Score</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #a16207;" id="fb-metric-avg-overall">0.0 ★</div>
+          <div style="font-size: 0.72rem; color: #ca8a04;" id="fb-metric-total-count">0 Reviews</div>
+        </div>
+
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #166534; font-weight: 700;">Recommend Rate</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: #15803d;" id="fb-metric-recommend">0%</div>
+          <div style="font-size: 0.72rem; color: #16a34a;">Net Advocacy</div>
+        </div>
+
+        <div style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 10px; padding: 1rem; text-align: center;">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: #5b21b6; font-weight: 700;">Content vs Org</div>
+          <div style="font-size: 1.1rem; font-weight: 800; color: #6d28d9; margin-top: 4px;" id="fb-metric-subratings">5.0 / 5.0</div>
+          <div style="font-size: 0.72rem; color: #7c3aed;">Content / Logistics</div>
+        </div>
+      </div>
+
+      <!-- Reviews Feed List -->
+      <div style="flex: 1; overflow-y: auto; padding-right: 4px;" id="feedback-reviews-list">
+        <p style="color: #64748b; text-align: center; padding: 2rem;">Loading participant reviews...</p>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem; pt: 1rem; border-top: 1px solid #f1f5f9;">
+        <button type="button" class="btn btn-outline" onclick="closeEventFeedbackAnalyticsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-Session Matrix Modal -->
+  <div class="modal-backdrop" id="event-sessions-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; padding: 2rem; border-radius: 16px; overflow: hidden;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="color: #1e1b4b; font-size: 1.25rem; margin-bottom: 2px;">
+            <i class="fas fa-timeline" style="color: #0284c7; margin-right: 6px;"></i> Multi-Session / Multi-Day Attendance Matrix
+          </h3>
+          <p style="font-size: 0.82rem; color: #64748b; margin: 0;" id="sessions-modal-event-title">Event Name</p>
+        </div>
+        <button onclick="closeSessionMatrixModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <!-- Configured Tracks Summary -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.85rem 1.25rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <strong style="color: #1e1b4b; font-size: 0.9rem;">Configured Academic Tracks:</strong>
+          <span style="font-size: 0.85rem; color: #475569;" id="sessions-list-display">Loading sessions...</span>
+        </div>
+        <span class="badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">Multi-Session Compliance</span>
+      </div>
+
+      <!-- Matrix Table -->
+      <div style="flex: 1; overflow-y: auto;" class="table-responsive">
+        <table class="table" style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+          <thead>
+            <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1;">
+              <th style="padding: 0.75rem 1rem; text-align: left;">Roll Number</th>
+              <th style="padding: 0.75rem 1rem; text-align: left;">Student Name</th>
+              <th style="padding: 0.75rem 1rem; text-align: center;">Sessions Completed</th>
+              <th style="padding: 0.75rem 1rem; text-align: center;">Overall Status</th>
+            </tr>
+          </thead>
+          <tbody id="session-matrix-body">
+            <tr><td colspan="4" style="text-align: center; padding: 2rem; color: #64748b;">Loading session attendance grid...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid #f1f5f9;">
+        <button type="button" class="btn btn-outline" onclick="closeSessionMatrixModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

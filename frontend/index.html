@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventHub – Digital Event Attendance Management System | KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="brand-meta">
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Kumaraguru College of Technology</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="events.html" class="nav-link">Upcoming Events</a></li>
+        <li><a href="my-registration.html" class="nav-link">Find My Pass</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Injected via auth.js -->
+        <a href="my-registration.html" class="btn btn-outline btn-sm">My Registration</a>
+        <a href="login.html" class="btn btn-primary btn-sm">Organizer Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-pill">
+        <span>🎓 Official Attendance Portal &bull; KCT Coimbatore</span>
+      </div>
+      <h1 class="hero-title">EventHub</h1>
+      <span class="hero-tagline">"Register. Attend. Track."</span>
+      <p class="hero-subtitle">
+        A smarter way to manage attendance for KCT student events. Replacing paper registers with instant QR-based verification and automated analytics.
+      </p>
+
+      <div class="hero-actions">
+        <a href="events.html" class="btn btn-primary btn-lg">Explore Events</a>
+        <a href="register.html" class="btn btn-outline btn-lg">Student Registration</a>
+        <a href="login.html" class="btn btn-secondary btn-lg">Organizer Login</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow Ribbon -->
+  <section class="container" style="margin-top: 2rem;">
+    <div class="workflow-ribbon">
+      <div class="workflow-ribbon-title">Continuous Digital Attendance Lifecycle</div>
+      <div class="workflow-steps">
+        <div class="workflow-node">Event Creation</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node">Student Registration</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node highlight">Unique QR Pass</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node highlight">Attendance Verification</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node">Digital Attendance Record</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node">Organizer Dashboard</div>
+        <div class="workflow-arrow">&rarr;</div>
+        <div class="workflow-node">Attendance Report</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem vs Solution Section -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="badge badge-category" style="margin-bottom: 0.5rem;">Targeted Problem Solved</span>
+        <h2 class="section-title">Why EventHub?</h2>
+        <p class="section-subtitle">
+          Engineered specifically to overcome chaotic venue check-ins and unverified manual paper sheets during campus events.
+        </p>
+      </div>
+
+      <div class="problem-solution-grid">
+        <!-- The Problem -->
+        <div class="problem-card">
+          <div class="icon-badge">✕</div>
+          <h3 style="color: var(--danger-text); margin-bottom: 0.75rem;">The Problem</h3>
+          <p style="color: var(--danger-text); font-weight: 500; font-size: 1.05rem; margin-bottom: 1rem;">
+            "Manual attendance during college events can be time-consuming, difficult to verify and prone to duplicate or missing entries."
+          </p>
+          <ul class="flow-step-list" style="color: #7f1d1d;">
+            <li>Long queues at venue desks while volunteers search printed paper lists.</li>
+            <li>No reliable way to prevent proxy attendance or unverified walk-ins.</li>
+            <li>Accidental duplicate sign-ins skewing participant counts.</li>
+            <li>Hours lost compiling post-event attendance spreadsheets manually.</li>
+          </ul>
+        </div>
+
+        <!-- Our Solution -->
+        <div class="solution-card">
+          <div class="icon-badge">✓</div>
+          <h3 style="color: var(--success-text); margin-bottom: 0.75rem;">Our Solution</h3>
+          <p style="color: var(--success-text); font-weight: 500; font-size: 1.05rem; margin-bottom: 1rem;">
+            "EventHub connects event registration with digital attendance verification, allowing organizers to quickly identify registered participants and record attendance."
+          </p>
+          <ul class="flow-step-list" style="color: #064e3b;">
+            <li>Instant mobile QR scanning with 1-second check-in verification.</li>
+            <li>Unique Registration ID with built-in duplicate check prevention.</li>
+            <li>Strict 4-case validation: blocks unregistered or already attended students.</li>
+            <li>Live organizer dashboard updating presence rates and instant CSV export.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spotlight Upcoming Events -->
+  <section class="section" style="background: white; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <span class="badge badge-category" style="margin-bottom: 0.5rem;">KCT Campus Highlights</span>
+          <h2 class="section-title" style="margin-bottom: 0;">Featured Upcoming Events</h2>
+        </div>
+        <a href="events.html" class="btn btn-outline">View All Events &rarr;</a>
+      </div>
+
+      <div class="grid-3" id="spotlight-events">
+        <!-- Rendered dynamically by events.js -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">Loading events...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Highlights Grid -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Designed for Fast Event Check-ins</h2>
+        <p class="section-subtitle">A simple, student-friendly architecture built for Kumaraguru College of Technology.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="stat-icon primary" style="margin-bottom: 1rem;">📱</div>
+          <h3>Digital QR Passes</h3>
+          <p style="font-size: 0.95rem; margin-top: 0.5rem;">
+            Every student receives a personalized ticket pass featuring their unique registration ID and high-contrast QR code immediately upon registration.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="stat-icon success" style="margin-bottom: 1rem;">🛡️</div>
+          <h3>Zero Duplicate Attendance</h3>
+          <p style="font-size: 0.95rem; margin-top: 0.5rem;">
+            Intelligent validation immediately warns organizers if a participant QR code is scanned a second time, recording the original check-in timestamp.
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="stat-icon secondary" style="margin-bottom: 1rem;">📊</div>
+          <h3>Instant Reports &amp; CSV</h3>
+          <p style="font-size: 0.95rem; margin-top: 0.5rem;">
+            Faculty and student coordinators can export full official attendance sheets in standard CSV format and print accredited reports in one click.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong style="color: var(--secondary); font-size: 1rem;">EventHub &bull; KCT</strong>
+        <p style="margin-top: 0.25rem;">Kumaraguru College of Technology, Chinnavedampatti, Coimbatore, Tamil Nadu 641049</p>
+      </div>
+      <div>
+        <p>Digital Event Attendance Management System &bull; Full-stack Node.js &amp; Firestore</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>

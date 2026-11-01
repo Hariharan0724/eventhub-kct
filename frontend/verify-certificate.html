@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Verification | EventHub - Kumaraguru College of Technology</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Inter', sans-serif;
+    }
+    .verify-header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: white;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      border-bottom: 4px solid #f59e0b;
+    }
+    .verify-container {
+      max-width: 760px;
+      margin: -2rem auto 3rem;
+      padding: 0 1rem;
+      width: 100%;
+    }
+    .verify-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+    }
+    .badge-verified {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .badge-invalid {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .credential-row {
+      display: flex;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .credential-label {
+      width: 38%;
+      color: #64748b;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .credential-value {
+      width: 62%;
+      color: #0f172a;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar" style="background: white; border-bottom: 1px solid #e2e8f0;">
+    <div class="nav-container" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.5rem;">
+      <a href="index.html" class="nav-brand" style="display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #1e1b4b; font-weight: 800; font-size: 1.15rem;">
+        <i class="fas fa-graduation-cap" style="color: #6d28d9; font-size: 1.35rem;"></i>
+        <span>EventHub <span style="font-size: 0.75rem; color: #6d28d9; font-weight: 700; background: #ede9fe; padding: 2px 8px; border-radius: 4px; margin-left: 4px;">KCT</span></span>
+      </a>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="events.html" class="btn btn-sm btn-outline">Explore Events</a>
+        <a href="login.html" class="btn btn-sm btn-primary">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner -->
+  <header class="verify-header">
+    <div style="font-family: 'Cinzel', serif; font-size: 1.1rem; letter-spacing: 0.1em; color: #fbbf24; margin-bottom: 0.25rem;">
+      KUMARAGURU COLLEGE OF TECHNOLOGY
+    </div>
+    <div style="font-size: 0.85rem; color: #c7d2fe; letter-spacing: 0.05em; margin-bottom: 1rem;">
+      COIMBATORE, TAMIL NADU &bull; AUTONOMOUS INSTITUTION
+    </div>
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 0.5rem;">
+      <i class="fas fa-shield-halved" style="color: #f59e0b; margin-right: 8px;"></i> Official Certificate Verification
+    </h1>
+    <p style="color: #cbd5e1; font-size: 0.95rem; max-width: 540px; margin: 0 auto;">
+      Tamper-proof digital credentials verified via EventHub Academic Attendance Registry
+    </p>
+  </header>
+
+  <!-- Content Container -->
+  <main class="verify-container">
+    <div class="verify-card" style="padding: 2.25rem;">
+
+      <!-- Loading State -->
+      <div id="verify-loading" style="text-align: center; padding: 3rem 1rem;">
+        <i class="fas fa-circle-notch fa-spin" style="font-size: 2.5rem; color: #6d28d9; margin-bottom: 1rem;"></i>
+        <h3 style="color: #1e1b4b; font-size: 1.15rem;">Verifying Institutional Credentials...</h3>
+        <p style="color: #64748b; font-size: 0.88rem;">Querying tamper-proof attendance record from KCT EventHub registry</p>
+      </div>
+
+      <!-- Verified Success State -->
+      <div id="verify-success" style="display: none;">
+        <div style="text-align: center; padding-bottom: 1.75rem; border-bottom: 2px dashed #e2e8f0; margin-bottom: 1.75rem;">
+          <div class="badge-verified" style="margin-bottom: 1rem;">
+            <i class="fas fa-circle-check" style="font-size: 1.15rem;"></i> Officially Verified & Authentic
+          </div>
+          <h2 id="cert-student-name" style="font-size: 1.65rem; color: #1e1b4b; margin-bottom: 0.35rem; font-weight: 800;">
+            Student Name
+          </h2>
+          <div style="display: flex; gap: 0.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <span id="cert-roll-number" class="user-roll-badge" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #c4b5fd; font-weight: 700; padding: 3px 10px; border-radius: 6px; font-size: 0.85rem;">
+              ROLL: 21BCS042
+            </span>
+            <span id="cert-department" style="color: #475569; font-size: 0.88rem; font-weight: 600;">
+              Department of Engineering
+            </span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.75rem;">
+          <h4 style="color: #1e1b4b; font-size: 1rem; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;">
+            Credential Verification Details
+          </h4>
+
+          <div class="credential-row">
+            <div class="credential-label">Certificate ID</div>
+            <div class="credential-value" id="cert-id" style="font-family: monospace; color: #6d28d9; font-weight: 700;">
+              KCT-CERT-XXXX
+            </div>
+          </div>
+
+          <div class="credential-row">
+            <div class="credential-label">Event Participated</div>
+            <div class="credential-value" id="cert-event-name">Event Name</div>
+          </div>
+
+          <div class="credential-row">
+            <div class="credential-label">Category & Venue</div>
+            <div class="credential-value" id="cert-event-venue">Category &bull; Venue</div>
+          </div>
+
+          <div class="credential-row">
+            <div class="credential-label">Event Date</div>
+            <div class="credential-value" id="cert-event-date">Date</div>
+          </div>
+
+          <div class="credential-row">
+            <div class="credential-label">Verified Check-in</div>
+            <div class="credential-value" id="cert-checkin-time" style="color: #059669;">
+              Verified Present
+            </div>
+          </div>
+
+          <div class="credential-row" style="border-bottom: none;">
+            <div class="credential-label">Issuing Authority</div>
+            <div class="credential-value" id="cert-institution">
+              Kumaraguru College of Technology (KCT), Coimbatore
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1.25rem; text-align: center;">
+          <div style="font-size: 0.82rem; color: #64748b; line-height: 1.5;">
+            <i class="fas fa-lock" style="color: #059669; margin-right: 4px;"></i>
+            This digital certificate is cryptographically recorded in the KCT EventHub system upon verified entrance scanning.
+            For institutional inquiries, contact <strong>kcteventhub@kct.ac.in</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Error / Invalid State -->
+      <div id="verify-error" style="display: none; text-align: center; padding: 2rem 1rem;">
+        <div class="badge-invalid" style="margin-bottom: 1.25rem;">
+          <i class="fas fa-triangle-exclamation"></i> Verification Failed
+        </div>
+        <h3 style="color: #1e1b4b; margin-bottom: 0.5rem;">Certificate Not Found or Unverified</h3>
+        <p id="verify-error-msg" style="color: #64748b; font-size: 0.9rem; max-width: 480px; margin: 0 auto 1.5rem;">
+          No verified attendance record corresponds to the requested Certificate ID. The certificate may be invalid, pending check-in, or revoked.
+        </p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+          <a href="index.html" class="btn btn-primary btn-sm">Return to Home</a>
+          <a href="events.html" class="btn btn-outline btn-sm">Browse Events</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer style="margin-top: auto; background: #0f172a; color: #94a3b8; text-align: center; padding: 1.5rem; font-size: 0.85rem;">
+    <div>&copy; 2026 Kumaraguru College of Technology (KCT), Coimbatore. All rights reserved.</div>
+    <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.35rem;">EventHub Cloud Application Development Project</div>
+  </footer>
+
+  <script>
+    async function verifyCertificate() {
+      const params = new URLSearchParams(window.location.search);
+      const certId = params.get('certId') || params.get('id');
+
+      const loadingEl = document.getElementById('verify-loading');
+      const successEl = document.getElementById('verify-success');
+      const errorEl = document.getElementById('verify-error');
+      const errorMsgEl = document.getElementById('verify-error-msg');
+
+      if (!certId) {
+        loadingEl.style.display = 'none';
+        errorMsgEl.textContent = 'No Certificate ID provided in query parameters.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/certificates/verify/${encodeURIComponent(certId)}`);
+        const json = await res.json();
+
+        loadingEl.style.display = 'none';
+
+        if (res.ok && json.success && json.verified) {
+          const c = json.data;
+          document.getElementById('cert-student-name').textContent = c.studentName || 'Student Attendee';
+          document.getElementById('cert-roll-number').textContent = `ROLL: ${c.rollNumber || 'N/A'}`;
+          document.getElementById('cert-department').textContent = c.department || 'Department of Engineering';
+          document.getElementById('cert-id').textContent = c.certificateId;
+          document.getElementById('cert-event-name').textContent = c.eventName || 'Campus Event';
+          document.getElementById('cert-event-venue').textContent = `${c.category || 'Event'} &bull; ${c.eventVenue || 'KCT Campus'}`;
+          document.getElementById('cert-event-date').textContent = c.eventDate || '2026';
+          
+          const checkInFormatted = c.verifiedCheckInTime ? new Date(c.verifiedCheckInTime).toLocaleString('en-IN', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', hour12: true
+          }) : 'Verified Entrance Scan';
+          document.getElementById('cert-checkin-time').textContent = `Checked-in: ${checkInFormatted}`;
+          
+          document.getElementById('cert-institution').textContent = c.institution || 'Kumaraguru College of Technology (KCT), Coimbatore';
+
+          successEl.style.display = 'block';
+        } else {
+          errorMsgEl.textContent = json.message || 'The specified certificate could not be validated in the institutional database.';
+          errorEl.style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Verification error:', err);
+        loadingEl.style.display = 'none';
+        errorMsgEl.textContent = 'Could not connect to the verification service. Please check your network connection.';
+        errorEl.style.display = 'block';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', verifyCertificate);
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upcoming Events | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="brand-meta">
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Kumaraguru College of Technology</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="events.html" class="nav-link active">Upcoming Events</a></li>
+        <li><a href="my-registration.html" class="nav-link">Find My Pass</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Injected via auth.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section style="background: white; border-bottom: 1px solid var(--border-color); padding: 3rem 0 2rem;">
+    <div class="container">
+      <div style="max-width: 800px;">
+        <span class="badge badge-category" style="margin-bottom: 0.5rem;">KCT Campus Events</span>
+        <h1 style="margin-bottom: 0.5rem;">Upcoming Events</h1>
+        <p style="font-size: 1.1rem; color: var(--text-muted);">
+          Discover and register for workshops, symposiums, hackathons, and cultural fests scheduled across the KCT Coimbatore campus.
+        </p>
+      </div>
+
+      <!-- Search & Category Filters -->
+      <div style="display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+        <!-- Category Buttons -->
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-sm btn-outline category-btn active" data-category="all">All Events</button>
+          <button class="btn btn-sm btn-outline category-btn" data-category="Technical">Technical</button>
+          <button class="btn btn-sm btn-outline category-btn" data-category="Workshop">Workshop</button>
+          <button class="btn btn-sm btn-outline category-btn" data-category="Hackathon">Hackathon</button>
+          <button class="btn btn-sm btn-outline category-btn" data-category="Cultural">Cultural</button>
+        </div>
+
+        <!-- Search Input -->
+        <div style="min-width: 280px; flex: 1; max-width: 400px;">
+          <input type="text" id="event-search" class="form-control" placeholder="🔍 Search by name, venue, keywords...">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Grid -->
+  <main class="section">
+    <div class="container">
+      <div class="grid-3" id="events-container">
+        <!-- Rendered dynamically by events.js from Firestore -->
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+          Loading upcoming events...
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong style="color: var(--secondary); font-size: 1rem;">EventHub &bull; KCT</strong>
+        <p style="margin-top: 0.25rem;">Kumaraguru College of Technology, Coimbatore</p>
+      </div>
+      <div>
+        <p>Digital Event Attendance Management System</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/events.js"></script>
+</body>
+</html>

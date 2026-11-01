@@ -1,0 +1,103 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: eventhub-openshift-template
+  annotations:
+    description: "EventHub Cloud Application Deployment Template for Red Hat OpenShift"
+    tags: "nodejs,express,cad,kct"
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      name: eventhub
+      labels:
+        app: eventhub
+
+  - apiVersion: build.openshift.io/v1
+    kind: BuildConfig
+    metadata:
+      name: eventhub-build
+      labels:
+        app: eventhub
+    spec:
+      source:
+        type: Git
+        git:
+          uri: "https://github.com/kct-student/eventhub.git"
+          ref: "main"
+      strategy:
+        type: Docker
+        dockerStrategy:
+          dockerfilePath: Dockerfile
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "eventhub:latest"
+
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      name: eventhub
+      labels:
+        app: eventhub
+    spec:
+      replicas: 2
+      strategy:
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: eventhub
+        spec:
+          containers:
+            - name: eventhub
+              image: eventhub:latest
+              ports:
+                - containerPort: 5000
+                  protocol: TCP
+              env:
+                - name: NODE_ENV
+                  value: "production"
+                - name: PORT
+                  value: "5000"
+              livenessProbe:
+                httpGet:
+                  path: /api/health
+                  port: 5000
+                initialDelaySeconds: 15
+                periodSeconds: 20
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 500m
+                  memory: 512Mi
+
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: eventhub-service
+      labels:
+        app: eventhub
+    spec:
+      ports:
+        - port: 8080
+          targetPort: 5000
+      selector:
+        app: eventhub
+
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: eventhub-route
+      labels:
+        app: eventhub
+    spec:
+      to:
+        kind: Service
+        name: eventhub-service
+      port:
+        targetPort: 8080
+      tls:
+        termination: edge

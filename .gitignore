@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment and sensitive keys
+.env
+serviceAccountKey.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# System and Editor files
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json

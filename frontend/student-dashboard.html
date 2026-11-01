@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="assets/vendor/qrcode.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Left Sidebar (Panel 2) -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fas fa-qrcode"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-text">EventHub</div>
+          <div class="sidebar-brand-subtitle">Student Portal &bull; KCT</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Main Menu</div>
+        <a class="sidebar-link active" onclick="switchStudentTab('overview')">
+          <span class="nav-icon"><i class="fas fa-house"></i></span>
+          <span>Dashboard</span>
+        </a>
+        <a class="sidebar-link" href="events.html">
+          <span class="nav-icon"><i class="fas fa-compass"></i></span>
+          <span>Browse Events</span>
+        </a>
+        <a class="sidebar-link" onclick="openCreateEventModal()">
+          <span class="nav-icon"><i class="fas fa-plus-circle"></i></span>
+          <span>Create Event</span>
+        </a>
+        <a class="sidebar-link" onclick="switchStudentTab('submissions')">
+          <span class="nav-icon"><i class="fas fa-file-lines"></i></span>
+          <span>My Submissions</span>
+        </a>
+        <a class="sidebar-link" onclick="switchStudentTab('passes')">
+          <span class="nav-icon"><i class="fas fa-ticket"></i></span>
+          <span>My Passes</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">Account</div>
+        <a class="sidebar-link" onclick="openProfileModal()">
+          <span class="nav-icon"><i class="fas fa-user-gear"></i></span>
+          <span>My Profile</span>
+        </a>
+        <a class="sidebar-link" onclick="logoutUser()" style="color: #fca5a5;">
+          <span class="nav-icon"><i class="fas fa-right-from-bracket"></i></span>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar-circle" id="sidebar-avatar">H</div>
+        <div class="user-profile-meta">
+          <div class="user-profile-name" id="sidebar-student-name">Hariharan</div>
+          <div class="user-roll-badge" id="sidebar-student-roll">21BCS042</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-wrap">
+          <h1 id="page-heading">Student Attendance &amp; Event Portal</h1>
+          <p id="page-subheading">Kumaraguru College of Technology, Coimbatore</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button class="btn btn-primary btn-sm" onclick="openCreateEventModal()">
+            <i class="fas fa-plus" style="margin-right: 4px;"></i> Submit New Event
+          </button>
+          <a href="events.html" class="btn btn-outline btn-sm">
+            <i class="fas fa-calendar-check" style="margin-right: 4px;"></i> Campus Events
+          </a>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- Welcome Hero Banner -->
+        <div class="card" style="padding: 1.75rem 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border: 1px solid #ddd6fe;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+                <span class="badge" style="background: #6d28d9; color: white;">KCT Student</span>
+                <span class="pass-roll-number-prominent" id="banner-roll-number" style="margin-top: 0;">21BCS042</span>
+              </div>
+              <h2 style="font-size: 1.6rem; color: #1e1b4b; margin-bottom: 0.25rem;" id="student-welcome-name">Welcome back!</h2>
+              <p style="font-size: 0.88rem; color: #5b21b6; margin-bottom: 0;" id="student-welcome-meta">
+                Department: Loading... &bull; Year: Loading...
+              </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem;">
+              <button onclick="openProfileModal()" class="btn btn-outline btn-sm" style="background: white;">
+                <i class="fas fa-id-badge" style="margin-right: 4px;"></i> Student Profile
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Stat Metric Cards (Panel 2) -->
+        <div class="stats-overview-grid">
+          <div class="metric-stat-card">
+            <div class="metric-icon-box purple">
+              <i class="fas fa-ticket"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="student-stat-registered">0</h3>
+              <p>Registered Passes</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box green">
+              <i class="fas fa-circle-check"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="student-stat-present">0</h3>
+              <p>Events Attended</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box amber">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="student-stat-pending">0</h3>
+              <p>Pending Entry Check-in</p>
+            </div>
+          </div>
+
+          <div class="metric-stat-card">
+            <div class="metric-icon-box blue">
+              <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="metric-value-block">
+              <h3 id="student-stat-rate">0.0%</h3>
+              <p>Attendance Rate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section Tabs Switcher -->
+        <div style="display: flex; gap: 0.75rem; border-bottom: 2px solid #e2e8f0; margin-bottom: 1.75rem;">
+          <button class="tab-btn active" id="tab-btn-passes" onclick="switchStudentTab('passes')" style="padding: 0.75rem 1.25rem; font-weight: 700; border: none; background: transparent; cursor: pointer; border-bottom: 3px solid #6d28d9; color: #6d28d9; font-size: 0.95rem;">
+            <i class="fas fa-qrcode" style="margin-right: 6px;"></i> My Registered Passes
+          </button>
+          <button class="tab-btn" id="tab-btn-submissions" onclick="switchStudentTab('submissions')" style="padding: 0.75rem 1.25rem; font-weight: 600; border: none; background: transparent; cursor: pointer; color: #64748b; font-size: 0.95rem;">
+            <i class="fas fa-paper-plane" style="margin-right: 6px;"></i> My Event Submissions
+          </button>
+        </div>
+
+        <!-- VIEW 1: MY PASSES -->
+        <div id="view-passes">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="font-size: 1.25rem; color: #1e1b4b;">Digital Attendance Passes</h3>
+              <p style="font-size: 0.85rem; color: #64748b;">Click on any pass to expand the full QR credential with your College Roll Number</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-sm btn-outline filter-btn active" data-filter="all">All Passes</button>
+              <button class="btn btn-sm btn-outline filter-btn" data-filter="Present">Verified Present</button>
+              <button class="btn btn-sm btn-outline filter-btn" data-filter="Pending">Awaiting Check-in</button>
+            </div>
+          </div>
+
+          <div id="student-passes-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem;">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+              <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem; color: #6d28d9;"></i>
+              <p style="margin-top: 0.5rem; color: #64748b;">Loading your registered event passes...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 2: MY SUBMISSIONS -->
+        <div id="view-submissions" style="display: none;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="font-size: 1.25rem; color: #1e1b4b;">My Submitted Events</h3>
+              <p style="font-size: 0.85rem; color: #64748b;">Track events you proposed for campus review and publishing</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openCreateEventModal()">
+              <i class="fas fa-plus"></i> Submit Event
+            </button>
+          </div>
+
+          <div id="student-submissions-container" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- PANEL 7: DIGITAL ATTENDANCE PASS MODAL (EXACT SPEC MATCH) -->
+  <div class="modal-backdrop" id="qr-pass-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="attendance-pass-container" id="pass-card-element" style="width: 100%;">
+      
+      <!-- Purple Header Bar -->
+      <div class="pass-header-strip">
+        <h3>
+          <i class="fas fa-qrcode"></i>
+          EVENT ATTENDANCE PASS
+        </h3>
+        <button class="modal-close" onclick="closeQrModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <!-- Pass Grid Content -->
+      <div class="pass-grid">
+        <div>
+          <!-- Student Avatar & Name & ROLL NUMBER -->
+          <div class="pass-student-block">
+            <div class="pass-avatar" id="modal-pass-avatar">H</div>
+            <div>
+              <div class="pass-student-name" id="modal-student-name">Hariharan</div>
+              <!-- Prominent Roll Number is the visible identifier -->
+              <div>
+                <span class="pass-roll-number-prominent" id="modal-roll-number">21BCS042</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Event Details Table -->
+          <div class="pass-details-table">
+            <div class="pass-detail-item">
+              <label>Event Name</label>
+              <span id="modal-event-title">AI &amp; Machine Learning Workshop</span>
+            </div>
+            <div class="pass-detail-item">
+              <label>Category</label>
+              <span id="modal-event-category">Technical</span>
+            </div>
+            <div class="pass-detail-item">
+              <label>Date &amp; Time</label>
+              <span id="modal-event-datetime">2026-10-15 &bull; 09:30 AM</span>
+            </div>
+            <div class="pass-detail-item">
+              <label>Venue</label>
+              <span id="modal-event-venue">Ramanujan Block Mech Lab 2</span>
+            </div>
+            <div class="pass-detail-item" style="grid-column: 1 / -1;">
+              <label>Attendance Status</label>
+              <div id="modal-status-badge-container">
+                <span class="badge badge-registered" id="modal-status-badge">● Registered (Pending Check-in)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- High-Contrast QR Code Side -->
+        <div class="pass-qr-side">
+          <div class="pass-qr-box" id="modal-qr-canvas-box">
+            <!-- QR Canvas or Img -->
+          </div>
+          <div class="pass-qr-hint">
+            <i class="fas fa-camera"></i> Scan at venue gate to mark attendance
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="pass-actions-footer">
+        <span style="font-size: 0.78rem; color: #64748b;">Kumaraguru College of Technology &bull; EventHub Pass</span>
+        <div style="display: flex; gap: 0.75rem;">
+          <button id="btn-download-modal-qr" class="btn btn-outline btn-sm">
+            <i class="fas fa-download"></i> Download Pass
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Pass
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 3: CREATE / SUBMIT EVENT MODAL (Available to Students & Organizers) -->
+  <div class="modal-backdrop" id="create-event-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem; overflow-y: auto;">
+    <div class="card" style="width: 100%; max-width: 600px; padding: 2rem; border-radius: 16px; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="color: #1e1b4b; font-size: 1.3rem;">Submit Campus Event Proposal</h3>
+          <p style="font-size: 0.85rem; color: #64748b; margin-top: 2px;">Your event will be submitted with pending status for organizer review.</p>
+        </div>
+        <button onclick="closeCreateEventModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <div id="create-event-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.88rem;"></div>
+
+      <form id="create-event-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-name">Event Title <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="evt-name" class="form-control" placeholder="e.g. NextGen Web Dev Bootcamp" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="evt-category">Category <span style="color: #ef4444;">*</span></label>
+            <select id="evt-category" class="form-control" required>
+              <option value="Technical">Technical</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Cultural">Cultural</option>
+              <option value="Sports">Sports</option>
+              <option value="Guest Lecture">Guest Lecture</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="evt-capacity">Seat Capacity <span style="color: #ef4444;">*</span></label>
+            <input type="number" id="evt-capacity" class="form-control" placeholder="100" min="10" max="1000" value="100" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="evt-date">Date <span style="color: #ef4444;">*</span></label>
+            <input type="date" id="evt-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="evt-time">Time <span style="color: #ef4444;">*</span></label>
+            <input type="text" id="evt-time" class="form-control" placeholder="09:30 AM - 04:30 PM" value="09:30 AM - 04:30 PM" required>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-venue">Venue <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="evt-venue" class="form-control" placeholder="e.g. Ramanujan Block Mech Lab 2 or Central Auditorium" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="evt-description">Event Description</label>
+          <textarea id="evt-description" class="form-control" rows="3" placeholder="Brief outline of event agenda and learning objectives..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCreateEventModal()">Cancel</button>
+          <button type="submit" id="btn-submit-event" class="btn btn-primary">
+            <i class="fas fa-paper-plane" style="margin-right: 4px;"></i> Submit for Approval
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CERTIFICATE MODAL -->
+  <div class="modal-backdrop" id="certificate-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(5px); z-index: 110; align-items: center; justify-content: center; padding: 1.5rem; overflow-y: auto;">
+    <div style="width: 100%; max-width: 820px; background: white; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; margin: auto;">
+      
+      <!-- Modal Action Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #0f172a; color: white;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 0.95rem;">
+          <i class="fas fa-award" style="color: #fbbf24;"></i>
+          <span>Official Institutional Participation Certificate</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button class="btn btn-sm btn-outline" style="color: white; border-color: rgba(255,255,255,0.3); background: transparent; padding: 0.35rem 0.75rem;" onclick="printCertificate()">
+            <i class="fas fa-print" style="margin-right: 4px;"></i> Print / Save PDF
+          </button>
+          <button onclick="closeCertificateModal()" style="border: none; background: none; font-size: 1.6rem; cursor: pointer; color: #94a3b8; line-height: 1;">&times;</button>
+        </div>
+      </div>
+
+      <!-- Printable Certificate Container -->
+      <div id="printable-certificate" style="padding: 2.5rem; background: #fffdfa; border: 12px solid #1e1b4b; outline: 3px solid #f59e0b; outline-offset: -8px; position: relative; margin: 1.25rem;">
+        
+        <!-- Watermark / Background Crest Accent -->
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: #1e1b4b; color: #fbbf24; border-radius: 50%; font-size: 1.8rem; margin-bottom: 0.75rem; border: 2px solid #f59e0b;">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div style="font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 800; letter-spacing: 0.08em; color: #1e1b4b;">
+            KUMARAGURU COLLEGE OF TECHNOLOGY
+          </div>
+          <div style="font-size: 0.8rem; color: #64748b; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px;">
+            Coimbatore - 641049, Tamil Nadu &bull; Autonomous Institution Affiliated to Anna University
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.75rem auto 0; max-width: 400px;">
+            <div style="height: 1px; background: #cbd5e1; flex: 1;"></div>
+            <i class="fas fa-certificate" style="color: #f59e0b; font-size: 0.9rem;"></i>
+            <div style="height: 1px; background: #cbd5e1; flex: 1;"></div>
+          </div>
+        </div>
+
+        <!-- Certificate Title -->
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div style="font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.12em; color: #b45309; text-transform: uppercase;">
+            Certificate of Participation
+          </div>
+          <div style="font-size: 0.82rem; color: #64748b; letter-spacing: 0.04em;">
+            THIS CREDENTIAL IS PROUDLY CONFERRED UPON
+          </div>
+        </div>
+
+        <!-- Student Details -->
+        <div style="text-align: center; margin-bottom: 1.75rem;">
+          <div id="cert-modal-student-name" style="font-size: 2rem; font-weight: 800; color: #1e1b4b; font-family: 'Cinzel', serif; border-bottom: 2px solid #f59e0b; display: inline-block; padding: 0 1.5rem 0.25rem;">
+            Student Name
+          </div>
+          <div style="margin-top: 0.5rem; font-size: 0.95rem; color: #334155;">
+            Roll Number: <strong id="cert-modal-roll" style="color: #6d28d9; font-family: monospace; font-size: 1.05rem;">21BCS042</strong> &bull; Department: <strong id="cert-modal-dept">Information Technology</strong>
+          </div>
+        </div>
+
+        <!-- Event Participation Text -->
+        <div style="text-align: center; max-width: 620px; margin: 0 auto 2rem; font-size: 0.95rem; line-height: 1.7; color: #334155;">
+          for active and verified participation in <strong id="cert-modal-event" style="color: #1e1b4b; font-size: 1.05rem;">Campus Event</strong>, organized by <span id="cert-modal-organizer">KCT Faculty &amp; Coordinators</span> on <strong id="cert-modal-date">2026</strong> at <span id="cert-modal-venue">KCT Campus</span>.
+        </div>
+
+        <!-- Footer Grid: Signatures & QR Code -->
+        <div style="display: grid; grid-template-columns: 1fr 140px 1fr; align-items: flex-end; gap: 1rem; border-top: 1px solid #e2e8f0; padding-top: 1.5rem;">
+          
+          <!-- Left Signatory -->
+          <div style="text-align: center;">
+            <div style="height: 36px; display: flex; align-items: flex-end; justify-content: center; font-family: 'Cinzel', serif; font-size: 1.1rem; color: #1e1b4b; font-style: italic;">
+              Dr. P. Ramesh Kumar
+            </div>
+            <div style="border-top: 1px solid #94a3b8; width: 140px; margin: 0.35rem auto 0.2rem;"></div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: #1e1b4b;">Faculty Coordinator</div>
+            <div style="font-size: 0.7rem; color: #64748b;">EventHub Academic Board</div>
+          </div>
+
+          <!-- Center Verification QR Box -->
+          <div style="text-align: center;">
+            <div id="cert-modal-qr-box" style="width: 100px; height: 100px; margin: 0 auto; background: white; padding: 4px; border: 1px solid #cbd5e1; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+              <!-- Verification QR Image -->
+            </div>
+            <div style="font-size: 0.65rem; color: #64748b; font-family: monospace; margin-top: 4px; font-weight: bold;" id="cert-modal-id-display">
+              KCT-CERT-XXXX
+            </div>
+            <div style="font-size: 0.62rem; color: #059669; font-weight: 700;">
+              <i class="fas fa-circle-check"></i> Scannable Verified
+            </div>
+          </div>
+
+          <!-- Right Signatory -->
+          <div style="text-align: center;">
+            <div style="height: 36px; display: flex; align-items: flex-end; justify-content: center; font-family: 'Cinzel', serif; font-size: 1.1rem; color: #1e1b4b; font-style: italic;">
+              Dr. D. Saravanan
+            </div>
+            <div style="border-top: 1px solid #94a3b8; width: 140px; margin: 0.35rem auto 0.2rem;"></div>
+            <div style="font-size: 0.78rem; font-weight: 700; color: #1e1b4b;">Principal / Head of Institution</div>
+            <div style="font-size: 0.7rem; color: #64748b;">Kumaraguru College of Tech</div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Bottom Hint -->
+      <div style="padding: 0.75rem 1.5rem 1.25rem; text-align: center; font-size: 0.8rem; color: #64748b;">
+        <i class="fas fa-shield-alt" style="color: #059669; margin-right: 4px;"></i>
+        This certificate includes a tamper-proof cryptographic verification link for faculty, academic coordinators, and external recruiters.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal-backdrop" id="profile-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 500px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="color: #1e1b4b; font-size: 1.3rem;">Student Profile</h3>
+        <button onclick="closeProfileModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+      <form id="student-profile-form">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="prof-name" class="form-control" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Roll Number</label>
+            <input type="text" id="prof-rollno" class="form-control" disabled style="background:#f1f5f9; font-family:monospace; font-weight:bold;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="prof-email" class="form-control" disabled style="background:#f1f5f9;">
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label">Department</label>
+          <input type="text" id="prof-dept" class="form-control" required>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeProfileModal()">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="modal-backdrop" id="feedback-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 520px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="color: #1e1b4b; font-size: 1.25rem; margin-bottom: 2px;">Event Feedback &amp; Evaluation</h3>
+          <p style="font-size: 0.82rem; color: #64748b; margin: 0;" id="feedback-modal-event-name">Event Name</p>
+        </div>
+        <button onclick="closeFeedbackModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <div id="feedback-modal-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+      <form id="feedback-form">
+        <input type="hidden" id="feedback-event-id">
+        <input type="hidden" id="feedback-reg-id">
+
+        <!-- Overall Rating Stars -->
+        <div class="form-group" style="margin-bottom: 1.25rem; text-align: center;">
+          <label class="form-label" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Overall Experience Rating</label>
+          <div style="display: flex; justify-content: center; gap: 0.5rem; font-size: 1.75rem; color: #cbd5e1; cursor: pointer;" id="star-rating-overall">
+            <i class="fas fa-star" data-val="1"></i>
+            <i class="fas fa-star" data-val="2"></i>
+            <i class="fas fa-star" data-val="3"></i>
+            <i class="fas fa-star" data-val="4"></i>
+            <i class="fas fa-star" data-val="5"></i>
+          </div>
+          <input type="hidden" id="fb-overall-val" value="5">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div class="form-group">
+            <label class="form-label" style="font-size: 0.8rem; font-weight: 600;">Content Quality</label>
+            <select id="fb-content-rating" class="form-control" style="font-size: 0.85rem;">
+              <option value="5">★★★★★ Exceptional (5/5)</option>
+              <option value="4">★★★★☆ Very Good (4/5)</option>
+              <option value="3">★★★☆☆ Average (3/5)</option>
+              <option value="2">★★☆☆☆ Below Average (2/5)</option>
+              <option value="1">★☆☆☆☆ Poor (1/5)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-size: 0.8rem; font-weight: 600;">Organization &amp; Venue</label>
+            <select id="fb-org-rating" class="form-control" style="font-size: 0.85rem;">
+              <option value="5">★★★★★ Seamless (5/5)</option>
+              <option value="4">★★★★☆ Good (4/5)</option>
+              <option value="3">★★★☆☆ Satisfactory (3/5)</option>
+              <option value="2">★★☆☆☆ Needs Improvement (2/5)</option>
+              <option value="1">★☆☆☆☆ Disorganized (1/5)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label class="form-label" style="font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="fb-recommend" checked style="width: 16px; height: 16px;">
+            <span>I would recommend this event to fellow KCT students</span>
+          </label>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" style="font-size: 0.85rem; font-weight: 600;">Comments &amp; Constructive Suggestions</label>
+          <textarea id="fb-comments" class="form-control" rows="3" placeholder="Share what you liked about this event and suggestions for future editions..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="closeFeedbackModal()">Cancel</button>
+          <button type="submit" id="btn-submit-feedback" class="btn btn-primary">
+            <i class="fas fa-paper-plane" style="margin-right: 4px;"></i> Submit Feedback
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/student-dashboard.js"></script>
+</body>
+</html>

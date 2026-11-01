@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Academic Attendance Roster | Kumaraguru College of Technology</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+      padding: 1.5rem 0;
+    }
+    .roster-container {
+      max-width: 1060px;
+      margin: 0 auto;
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+    }
+    .kct-official-header {
+      text-align: center;
+      border-bottom: 2px solid #1e1b4b;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .inst-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      letter-spacing: 0.05em;
+    }
+    .inst-sub {
+      font-size: 0.82rem;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+    .doc-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #b45309;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.75rem;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      background: #f8fafc;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+    }
+    .meta-item label {
+      display: block;
+      font-size: 0.75rem;
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .meta-item span {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-bottom: 2rem;
+    }
+    .roster-table th {
+      background: #1e1b4b;
+      color: white;
+      text-align: left;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: 1px solid #1e1b4b;
+    }
+    .roster-table td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid #cbd5e1;
+      vertical-align: middle;
+    }
+    .roster-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    .badge-present-official {
+      color: #065f46;
+      font-weight: 700;
+      background: #d1fae5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      display: inline-block;
+    }
+    .badge-absent-official {
+      color: #991b1b;
+      font-weight: 600;
+      background: #fee2e2;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      display: inline-block;
+    }
+    .sign-off-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid #cbd5e1;
+    }
+    .sign-box {
+      text-align: center;
+    }
+    .sign-line {
+      height: 48px;
+      border-bottom: 1px solid #475569;
+      margin-bottom: 0.5rem;
+    }
+    .sign-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .sign-dept {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .roster-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      @page {
+        size: landscape;
+        margin: 1.2cm;
+      }
+      .roster-table th {
+        background: #1e1b4b !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Bar (hidden in print) -->
+  <div class="no-print" style="max-width: 1060px; margin: 0 auto 1rem; display: flex; justify-content: space-between; align-items: center; padding: 0 0.5rem;">
+    <button class="btn btn-sm btn-outline" onclick="window.history.back()">
+      <i class="fas fa-arrow-left" style="margin-right: 4px;"></i> Back to Dashboard
+    </button>
+    <div style="display: flex; gap: 0.75rem;">
+      <button class="btn btn-sm btn-outline" id="btn-export-csv">
+        <i class="fas fa-file-csv" style="margin-right: 4px;"></i> Export CSV
+      </button>
+      <button class="btn btn-sm btn-primary" onclick="window.print()">
+        <i class="fas fa-print" style="margin-right: 4px;"></i> Print Official Roster
+      </button>
+    </div>
+  </div>
+
+  <div class="roster-container">
+    
+    <!-- Header -->
+    <div class="kct-official-header">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+        <i class="fas fa-graduation-cap" style="font-size: 2rem; color: #1e1b4b;"></i>
+        <div class="inst-title">KUMARAGURU COLLEGE OF TECHNOLOGY</div>
+      </div>
+      <div class="inst-sub">Coimbatore - 641049 &bull; Autonomous Institution Affiliated to Anna University</div>
+      <div class="doc-title">Official Academic Event Attendance &amp; Clearance Roster</div>
+    </div>
+
+    <!-- Event Metadata -->
+    <div class="meta-grid">
+      <div class="meta-item">
+        <label>Event Name</label>
+        <span id="meta-event-name">Loading Event...</span>
+      </div>
+      <div class="meta-item">
+        <label>Date &amp; Time</label>
+        <span id="meta-event-datetime">—</span>
+      </div>
+      <div class="meta-item">
+        <label>Venue</label>
+        <span id="meta-event-venue">—</span>
+      </div>
+      <div class="meta-item">
+        <label>Organizing Department</label>
+        <span id="meta-event-dept">—</span>
+      </div>
+      <div class="meta-item">
+        <label>Attendance Rate</label>
+        <span id="meta-attendance-rate" style="color: #059669;">0.0%</span>
+      </div>
+      <div class="meta-item">
+        <label>Registered / Present</label>
+        <span id="meta-count-ratio">0 / 0</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <table class="roster-table">
+      <thead>
+        <tr>
+          <th style="width: 45px; text-align: center;">S.No</th>
+          <th style="width: 120px;">Roll Number</th>
+          <th>Student Name</th>
+          <th>Department</th>
+          <th style="width: 80px;">Year</th>
+          <th style="width: 100px; text-align: center;">Status</th>
+          <th style="width: 180px;">Check-in Timestamp</th>
+        </tr>
+      </thead>
+      <tbody id="roster-tbody">
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+            <i class="fas fa-circle-notch fa-spin" style="margin-right: 6px;"></i> Loading official participant roster...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Three-Tier Sign-off Clearance Section -->
+    <div class="sign-off-grid">
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Faculty Event Coordinator</div>
+        <div class="sign-dept">Signature &amp; Date</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Head of Department (HOD)</div>
+        <div class="sign-dept">Signature &amp; Department Seal</div>
+      </div>
+      <div class="sign-box">
+        <div class="sign-line"></div>
+        <div class="sign-title">Dean / Academic Clearance</div>
+        <div class="sign-dept">Controller of Attendance Records</div>
+      </div>
+    </div>
+
+    <!-- Footer Timestamp -->
+    <div style="margin-top: 2rem; text-align: center; font-size: 0.72rem; color: #94a3b8; border-top: 1px dashed #e2e8f0; padding-top: 0.5rem;">
+      EventHub Institutional Attendance Management &bull; Generated on <span id="roster-gen-date"></span> &bull; Verified via QR Scans
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    async function loadAcademicRoster() {
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get('eventId') || params.get('id');
+
+      if (!eventId) {
+        alert('Event ID is missing from URL query parameter.');
+        return;
+      }
+
+      document.getElementById('btn-export-csv').onclick = () => {
+        const token = getAuthToken();
+        window.location.href = `/api/events/${encodeURIComponent(eventId)}/export-csv?token=${encodeURIComponent(token)}`;
+      };
+
+      try {
+        const res = await fetch(`/api/events/${encodeURIComponent(eventId)}/academic-roster`, {
+          headers: getAuthHeaders()
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          alert('You must be logged in as an Organizer or Admin to view this academic roster.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const json = await res.json();
+        if (!res.ok || !json.success) {
+          alert(json.message || 'Failed to load academic roster.');
+          return;
+        }
+
+        const data = json.data;
+        const evt = data.event;
+        const stats = data.stats;
+        const roster = data.roster || [];
+
+        document.getElementById('meta-event-name').textContent = evt.name || 'Campus Event';
+        document.getElementById('meta-event-datetime').textContent = `${evt.date || '2026'} • ${evt.time || '09:30 AM'}`;
+        document.getElementById('meta-event-venue').textContent = evt.venue || 'KCT Campus';
+        document.getElementById('meta-event-dept').textContent = evt.organizer || 'Academic Affairs';
+        document.getElementById('meta-attendance-rate').textContent = `${stats.attendanceRate || 0}%`;
+        document.getElementById('meta-count-ratio').textContent = `${stats.totalPresent} Present / ${stats.totalRegistered} Registered`;
+        document.getElementById('roster-gen-date').textContent = new Date().toLocaleString();
+
+        const tbody = document.getElementById('roster-tbody');
+        if (roster.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                No registered students found for this event.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = roster.map(r => `
+          <tr>
+            <td style="text-align: center; font-weight: 600; color: #64748b;">${r.sNo}</td>
+            <td style="font-family: monospace; font-weight: 700; color: #6d28d9;">${r.rollNumber}</td>
+            <td style="font-weight: 600;">${r.studentName}</td>
+            <td>${r.department || 'Engineering'}</td>
+            <td>${r.year || '3rd Year'}</td>
+            <td style="text-align: center;">
+              ${r.attendanceStatus === 'Present' 
+                ? '<span class="badge-present-official">● PRESENT</span>'
+                : '<span class="badge-absent-official">○ ABSENT</span>'}
+            </td>
+            <td style="font-size: 0.8rem; color: #475569;">${r.checkInTime}</td>
+          </tr>
+        `).join('');
+
+      } catch (err) {
+        console.error('Error loading academic roster:', err);
+        alert('Server connection error loading roster.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAcademicRoster);
+  </script>
+</body>
+</html>

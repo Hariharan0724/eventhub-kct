@@ -1,0 +1,23 @@
+# =========================================================================
+# Cloud Foundry PaaS Application Manifest
+# Course: Cloud Application Development (CAD)
+# Institution: Kumaraguru College of Technology (KCT)
+# =========================================================================
+
+---
+applications:
+  - name: eventhub-kct
+    memory: 512M
+    disk_quota: 1024M
+    instances: 2
+    buildpacks:
+      - nodejs_buildpack
+    command: node backend/server.js
+    routes:
+      - route: eventhub-kct.apps.cloudfoundry.com
+    env:
+      NODE_ENV: production
+      PORT: 8080
+    health-check-type: http
+    health-check-http-endpoint: /api/health
+    health-check-invocation-timeout: 10

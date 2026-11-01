@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | EventHub - Kumaraguru College of Technology</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="login-split-wrapper">
+    <!-- Left Hero Banner Side (Purple Gradient) -->
+    <div class="login-banner-side">
+      <div>
+        <div class="banner-institution-badge">
+          <i class="fas fa-graduation-cap"></i>
+          <span>Kumaraguru College of Technology, Coimbatore</span>
+        </div>
+      </div>
+
+      <div class="banner-hero-content">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div style="width: 44px; height: 44px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #5b21b6; font-size: 1.4rem; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <i class="fas fa-qrcode"></i>
+          </div>
+          <span style="font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em;">EventHub</span>
+        </div>
+        <h1>Digital Event & Attendance System</h1>
+        <p>Seamlessly discover campus events, secure verified attendance passes with your College Roll Number, and track your participation in real-time.</p>
+
+        <div class="banner-highlights">
+          <div class="highlight-item">
+            <i class="fas fa-id-card-clip"></i>
+            <span>Instant Digital Pass tied strictly to your College Roll Number</span>
+          </div>
+          <div class="highlight-item">
+            <i class="fas fa-shield-halved"></i>
+            <span>3-tier role-based access for Students, Organizers & Admins</span>
+          </div>
+          <div class="highlight-item">
+            <i class="fas fa-bolt"></i>
+            <span>High-speed QR camera scanner with duplicate check safeguards</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.8rem; color: #c4b5fd;">
+        &copy; 2026 Kumaraguru College of Technology. All Rights Reserved.
+      </div>
+    </div>
+
+    <!-- Right Login Form Side -->
+    <div class="login-form-side">
+      <div class="auth-form-card">
+        
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <h2 id="login-title" style="font-size: 1.6rem; color: #1e1b4b; font-weight: 800;">Welcome Back</h2>
+          <p id="login-subtitle" style="font-size: 0.88rem; color: #64748b; margin-top: 4px;">
+            Sign in to access your digital pass and event portal
+          </p>
+        </div>
+
+        <!-- 3 Role Tabs: Student | Organizer | Admin (Panel 1) -->
+        <div class="login-tabs-bar">
+          <button type="button" class="login-tab-btn active" id="tab-student" onclick="switchRoleTab('student')">
+            <i class="fas fa-user-graduate"></i> Student
+          </button>
+          <button type="button" class="login-tab-btn" id="tab-organizer" onclick="switchRoleTab('organizer')">
+            <i class="fas fa-clipboard-user"></i> Organizer
+          </button>
+          <button type="button" class="login-tab-btn" id="tab-admin" onclick="switchRoleTab('admin')">
+            <i class="fas fa-user-shield"></i> Admin
+          </button>
+        </div>
+
+        <div id="login-alert" style="display: none; padding: 0.85rem 1rem; border-radius: 8px; margin-bottom: 1.25rem; font-size: 0.88rem;"></div>
+
+        <form id="login-form">
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label" id="label-identifier" for="login-identifier" style="font-size: 0.88rem; font-weight: 600; color: #334155; margin-bottom: 6px; display: block;">
+              College Roll Number or KCT Email
+            </label>
+            <div style="position: relative;">
+              <input 
+                type="text" 
+                id="login-identifier" 
+                class="form-control" 
+                placeholder="e.g. 21BCS042 or hariharan@kct.ac.in" 
+                required 
+                autocomplete="username"
+                style="padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%; font-size: 0.95rem;"
+              >
+            </div>
+            <small id="identifier-hint" style="font-size: 0.75rem; color: #64748b; margin-top: 4px; display: block;">
+              Enter your uppercase College Roll Number (e.g. 21BCS042)
+            </small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="login-password" style="font-size: 0.88rem; font-weight: 600; color: #334155;">Password</label>
+              <a href="#" onclick="alert('Please contact KCT IT Support or your Department Event Administrator to reset your password.')" style="font-size: 0.78rem; color: #6d28d9; text-decoration: none; font-weight: 500;">Forgot Password?</a>
+            </div>
+            <input 
+              type="password" 
+              id="login-password" 
+              class="form-control" 
+              placeholder="••••••••" 
+              required 
+              autocomplete="current-password"
+              style="padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%; font-size: 0.95rem;"
+            >
+          </div>
+
+          <button type="submit" id="btn-login-submit" class="btn btn-primary btn-block btn-lg" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 600; border-radius: 8px; background: #6d28d9; border: none; color: white; cursor: pointer; transition: var(--transition);">
+            <i class="fas fa-arrow-right-to-bracket" style="margin-right: 6px;"></i> Sign In as Student
+          </button>
+        </form>
+
+        <!-- Quick Demo Credentials Box for Evaluation -->
+        <div class="demo-account-box" id="demo-box">
+          <h5><i class="fas fa-key"></i> Quick Fill Team Accounts (Click to test):</h5>
+          <div class="demo-chips" id="demo-chips-container">
+            <!-- Populated dynamically based on selected role tab -->
+          </div>
+        </div>
+
+        <div id="signup-redirect-box" style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: #64748b;">
+          Don't have a student account? 
+          <a href="register.html" style="color: #6d28d9; font-weight: 600; text-decoration: none;">Register Roll Number</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    let activeRole = 'student';
+
+    const roleConfigs = {
+      student: {
+        title: 'Student Sign In',
+        subtitle: 'Enter your College Roll Number to access your passes',
+        label: 'College Roll Number or KCT Email',
+        placeholder: 'e.g. 21BCS042 or hariharan@kct.ac.in',
+        hint: 'Use your uppercase roll number (e.g. 21BCS042)',
+        btnText: 'Sign In as Student',
+        showRegister: true,
+        chips: [
+          { label: 'Hariharan (21BCS042)', id: '21BCS042', pass: 'student@kct2026' },
+          { label: 'Shaheer (21BCS043)', id: '21BCS043', pass: 'student@kct2026' },
+          { label: 'Ashwanth (21BCS044)', id: '21BCS044', pass: 'student@kct2026' }
+        ]
+      },
+      organizer: {
+        title: 'Organizer Sign In',
+        subtitle: 'Manage events, approvals, and mark verified attendance',
+        label: 'Organizer Email Address',
+        placeholder: 'organizer@kct.ac.in',
+        hint: 'KCT Faculty / Student Affairs organizer account',
+        btnText: 'Sign In as Organizer',
+        showRegister: false,
+        chips: [
+          { label: 'EventHub Organizer', id: 'organizer@kct.ac.in', pass: 'admin@kct2026' }
+        ]
+      },
+      admin: {
+        title: 'Administrator Sign In',
+        subtitle: 'Full campus system control, student records & audit logs',
+        label: 'Administrator Email',
+        placeholder: 'admin@kct.ac.in',
+        hint: 'KCT System Administrator credentials',
+        btnText: 'Sign In as Administrator',
+        showRegister: false,
+        chips: [
+          { label: 'System Admin', id: 'admin@kct.ac.in', pass: 'admin@kct2026' }
+        ]
+      }
+    };
+
+    function switchRoleTab(role) {
+      activeRole = role;
+      document.querySelectorAll('.login-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`tab-${role}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const config = roleConfigs[role];
+      document.getElementById('login-title').textContent = config.title;
+      document.getElementById('login-subtitle').textContent = config.subtitle;
+      document.getElementById('label-identifier').textContent = config.label;
+      document.getElementById('login-identifier').placeholder = config.placeholder;
+      document.getElementById('identifier-hint').textContent = config.hint;
+      document.getElementById('btn-login-submit').innerHTML = `<i class="fas fa-arrow-right-to-bracket" style="margin-right: 6px;"></i> ${config.btnText}`;
+      document.getElementById('signup-redirect-box').style.display = config.showRegister ? 'block' : 'none';
+
+      // Render Demo Chips
+      const chipsContainer = document.getElementById('demo-chips-container');
+      chipsContainer.innerHTML = '';
+      config.chips.forEach(chip => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'demo-chip';
+        btn.textContent = chip.label;
+        btn.onclick = () => fillCredentials(chip.id, chip.pass);
+        chipsContainer.appendChild(btn);
+      });
+    }
+
+    function fillCredentials(id, pass) {
+      document.getElementById('login-identifier').value = id;
+      document.getElementById('login-password').value = pass;
+    }
+
+    // Initialize role based on URL parameter or default to student
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedRole = urlParams.get('role');
+    if (requestedRole && roleConfigs[requestedRole]) {
+      switchRoleTab(requestedRole);
+    } else {
+      switchRoleTab('student');
+    }
+
+    if (urlParams.get('auth') === 'required') {
+      const alertBox = document.getElementById('login-alert');
+      alertBox.style.display = 'block';
+      alertBox.style.background = '#fef3c7';
+      alertBox.style.border = '1px solid #fde68a';
+      alertBox.style.color = '#92400e';
+      const roleName = requestedRole ? (requestedRole.charAt(0).toUpperCase() + requestedRole.slice(1)) : 'Authorized';
+      alertBox.textContent = `${roleName} privileges required. Please sign in to continue.`;
+    }
+
+    // Handle Form Submit
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = document.getElementById('login-identifier').value.trim();
+      const password = document.getElementById('login-password').value;
+      const alertBox = document.getElementById('login-alert');
+      const submitBtn = document.getElementById('btn-login-submit');
+
+      alertBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier, password, role: activeRole })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#fef2f2';
+          alertBox.style.border = '1px solid #fecaca';
+          alertBox.style.color = '#991b1b';
+          alertBox.textContent = data.message || 'Authentication failed. Please check your credentials.';
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="fas fa-arrow-right-to-bracket" style="margin-right: 6px;"></i> ${roleConfigs[activeRole].btnText}`;
+          return;
+        }
+
+        // Store auth tokens and user data across standard and legacy keys
+        localStorage.setItem('eventhub_token', data.token);
+        localStorage.setItem('eventhub_user', JSON.stringify(data.user));
+        localStorage.setItem('eventhub_auth_token', data.token);
+        localStorage.setItem('eventhub_user_profile', JSON.stringify(data.user));
+
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#ecfdf5';
+        alertBox.style.border = '1px solid #a7f3d0';
+        alertBox.style.color = '#065f46';
+        alertBox.textContent = 'Login successful! Redirecting to your dashboard...';
+
+        // Redirect based on role
+        setTimeout(() => {
+          if (data.user.role === 'admin') {
+            window.location.href = 'admin-dashboard.html';
+          } else if (data.user.role === 'organizer') {
+            window.location.href = 'organizer-dashboard.html';
+          } else {
+            window.location.href = 'student-dashboard.html';
+          }
+        }, 600);
+
+      } catch (err) {
+        console.error('Login error:', err);
+        alertBox.style.display = 'block';
+        alertBox.style.background = '#fef2f2';
+        alertBox.style.border = '1px solid #fecaca';
+        alertBox.style.color = '#991b1b';
+        alertBox.textContent = 'Server connection error. Please try again.';
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fas fa-arrow-right-to-bracket" style="margin-right: 6px;"></i> ${roleConfigs[activeRole].btnText}`;
+      }
+    });
+  </script>
+</body>
+</html>

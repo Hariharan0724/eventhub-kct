@@ -1,0 +1,38 @@
+{
+  "name": "eventhub-kct",
+  "version": "1.0.0",
+  "description": "EventHub - Digital Event Attendance Management System for Kumaraguru College of Technology (KCT), Coimbatore",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "seed": "node backend/seed.js",
+    "test": "node backend/test_suite.js",
+    "dev": "node backend/server.js",
+    "docker:build": "docker build -t eventhub-kct:1.0 .",
+    "docker:run": "docker run -p 5000:5000 eventhub-kct:1.0",
+    "k8s:apply": "kubectl apply -f k8s/namespace.yaml -f k8s/configmap.yaml -f k8s/deployment.yaml -f k8s/service.yaml -f k8s/hpa.yaml",
+    "k8s:delete": "kubectl delete -f k8s/hpa.yaml -f k8s/service.yaml -f k8s/deployment.yaml -f k8s/configmap.yaml -f k8s/namespace.yaml"
+  },
+  "keywords": [
+    "attendance",
+    "qr-code",
+    "event-management",
+    "kct",
+    "firebase",
+    "firestore",
+    "express"
+  ],
+  "author": "KCT EventHub Team",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.0",
+    "nodemailer": "^10.3.1",
+    "qrcode": "^1.5.4"
+  }
+}

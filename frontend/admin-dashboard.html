@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Console | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Left Sidebar (Panel 9) -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #4c1d95, #7c3aed);">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-text">EventHub</div>
+          <div class="sidebar-brand-subtitle">System Administration</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Overview</div>
+        <a class="sidebar-link active" onclick="switchAdminTab('overview')">
+          <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
+          <span>System Overview</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">User Management</div>
+        <a class="sidebar-link" onclick="switchAdminTab('students')">
+          <span class="nav-icon"><i class="fas fa-user-graduate"></i></span>
+          <span>Student Manager</span>
+        </a>
+        <a class="sidebar-link" onclick="switchAdminTab('organizers')">
+          <span class="nav-icon"><i class="fas fa-user-tie"></i></span>
+          <span>Organizer Manager</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">Operations &amp; Audits</div>
+        <a class="sidebar-link" href="event-approvals.html">
+          <span class="nav-icon"><i class="fas fa-stamp"></i></span>
+          <span>Event Approvals</span>
+        </a>
+        <a class="sidebar-link" onclick="switchAdminTab('attendance')">
+          <span class="nav-icon"><i class="fas fa-clipboard-check"></i></span>
+          <span>Attendance Adjustments</span>
+        </a>
+        <a class="sidebar-link" onclick="switchAdminTab('audit-logs')">
+          <span class="nav-icon"><i class="fas fa-clock-rotate-left"></i></span>
+          <span>Audit Logs Viewer</span>
+        </a>
+        <a class="sidebar-link" onclick="switchAdminTab('emails')">
+          <span class="nav-icon"><i class="fas fa-envelope-circle-check"></i></span>
+          <span>Email Deliveries</span>
+        </a>
+
+        <div class="nav-section-title" style="margin-top: 1rem;">Quick Links</div>
+        <a class="sidebar-link" href="organizer-dashboard.html">
+          <span class="nav-icon"><i class="fas fa-external-link-alt"></i></span>
+          <span>Organizer Portal</span>
+        </a>
+        <a class="sidebar-link" onclick="logoutUser()" style="color: #fca5a5;">
+          <span class="nav-icon"><i class="fas fa-right-from-bracket"></i></span>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-footer">
+        <div class="user-avatar-circle" style="background: #4c1d95; border-color: #6d28d9;">
+          <i class="fas fa-crown"></i>
+        </div>
+        <div class="user-profile-meta">
+          <div class="user-profile-name" id="sidebar-admin-name">Admin Root</div>
+          <div class="user-profile-role">System Administrator</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-wrap">
+          <h1 id="admin-view-title">System Overview &amp; Health</h1>
+          <p id="admin-view-subtitle">Kumaraguru College of Technology &bull; EventHub Command Center</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button onclick="refreshCurrentAdminView()" class="btn btn-outline btn-sm">
+            <i class="fas fa-rotate"></i> Refresh
+          </button>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- ===================================================================
+             VIEW 1: SYSTEM OVERVIEW (Donut Chart & Metrics)
+             =================================================================== -->
+        <div id="admin-view-overview">
+          
+          <!-- 4 Core Metrics Cards -->
+          <div class="stats-overview-grid">
+            <div class="metric-stat-card">
+              <div class="metric-icon-box purple">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="metric-value-block">
+                <h3 id="stat-admin-students">0</h3>
+                <p>Enrolled Students</p>
+              </div>
+            </div>
+
+            <div class="metric-stat-card">
+              <div class="metric-icon-box blue">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <div class="metric-value-block">
+                <h3 id="stat-admin-organizers">0</h3>
+                <p>Authorized Organizers</p>
+              </div>
+            </div>
+
+            <div class="metric-stat-card">
+              <div class="metric-icon-box green">
+                <i class="fas fa-calendar-check"></i>
+              </div>
+              <div class="metric-value-block">
+                <h3 id="stat-admin-events">0</h3>
+                <p>Total Events</p>
+              </div>
+            </div>
+
+            <div class="metric-stat-card">
+              <div class="metric-icon-box amber">
+                <i class="fas fa-shield-check"></i>
+              </div>
+              <div class="metric-value-block">
+                <h3 id="stat-admin-approved">0</h3>
+                <p>Approved &amp; Active</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart & Feed Split -->
+          <div style="display: grid; grid-template-columns: 360px 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <!-- Donut Chart Card (Panel 9) -->
+            <div class="card" style="padding: 1.75rem; border-radius: 14px; text-align: center;">
+              <h3 style="font-size: 1.15rem; color: #1e1b4b; margin-bottom: 0.25rem;">Event Approval Status</h3>
+              <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 1.5rem;">Ratio of approved vs pending vs rejected</p>
+
+              <!-- Conic Gradient Donut -->
+              <div class="donut-chart-box" id="event-donut-visual" style="background: conic-gradient(#10b981 0% 70%, #f59e0b 70% 85%, #ef4444 85% 100%);">
+                <div class="donut-chart-center">
+                  <span style="font-size: 1.5rem; font-weight: 800; color: #1e1b4b;" id="donut-total-count">0</span>
+                  <span style="font-size: 0.72rem; color: #64748b; text-transform: uppercase;">Total Events</span>
+                </div>
+              </div>
+
+              <!-- Legend -->
+              <div class="donut-legend">
+                <div class="legend-item">
+                  <div class="legend-dot" style="background: #10b981;"></div>
+                  <span>Approved: <strong id="legend-approved">0</strong></span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background: #f59e0b;"></div>
+                  <span>Pending: <strong id="legend-pending">0</strong></span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background: #ef4444;"></div>
+                  <span>Rejected: <strong id="legend-rejected">0</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activities Audit Feed (Panel 9) -->
+            <div class="card" style="padding: 1.75rem; border-radius: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                  <h3 style="font-size: 1.15rem; color: #1e1b4b;">Recent System Activities</h3>
+                  <p style="font-size: 0.8rem; color: #64748b; margin-top: 2px;">Immutable audit trail of recent operations</p>
+                </div>
+                <button onclick="switchAdminTab('audit-logs')" class="btn btn-outline btn-sm">Full Audit Trail &rarr;</button>
+              </div>
+
+              <div id="overview-recent-activities" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Department & Academic Year Analytics Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            
+            <!-- Department Breakdown Card -->
+            <div class="card" style="border-radius: 14px; padding: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.1rem; color: #1e1b4b; margin: 0;">
+                  <i class="fas fa-building-columns" style="color: #6d28d9; margin-right: 6px;"></i> Department Turnout
+                </h3>
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Campus-wide Verified Attendance</span>
+              </div>
+              <div id="admin-analytics-department-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                <p style="color: #64748b; text-align: center; padding: 1rem;">Loading department analytics...</p>
+              </div>
+            </div>
+
+            <!-- Academic Year Distribution Card -->
+            <div class="card" style="border-radius: 14px; padding: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.1rem; color: #1e1b4b; margin: 0;">
+                  <i class="fas fa-user-graduate" style="color: #6d28d9; margin-right: 6px;"></i> Academic Year Distribution
+                </h3>
+                <span style="font-size: 0.78rem; color: #64748b; font-weight: 600;">Batch Ratios</span>
+              </div>
+              <div id="admin-analytics-year-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.85rem;">
+                <p style="color: #64748b; text-align: center; padding: 1rem; grid-column: 1 / -1;">Loading year distribution...</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Live Gate Feed in Admin Console -->
+          <div class="card" style="border-radius: 14px; padding: 1.5rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h3 style="font-size: 1.15rem; color: #1e1b4b; margin: 0;">Live Entrance Scan Feed</h3>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 2px 0 0;">Real-time gate scan stream across all campus events</p>
+              </div>
+              <span id="admin-live-stream-badge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 9999px;">
+                <span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                LIVE GATE FEED
+              </span>
+            </div>
+            <div id="admin-live-feed-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <p style="color: #64748b; text-align: center; padding: 1.5rem;">Waiting for incoming scans...</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===================================================================
+             VIEW 2: STUDENT MANAGER
+             =================================================================== -->
+        <div id="admin-view-students" style="display: none;">
+          <div class="card" style="padding: 1.5rem; border-radius: 14px; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div style="flex: 2; min-width: 280px;">
+                <input 
+                  type="text" 
+                  id="admin-student-search" 
+                  class="form-control" 
+                  placeholder="🔍 Search by student name, College Roll Number, or email..."
+                >
+              </div>
+              <div style="display: flex; gap: 0.75rem;">
+                <select id="admin-student-status-filter" class="form-control" style="width: 150px;">
+                  <option value="all">All Status</option>
+                  <option value="active">Active Only</option>
+                  <option value="inactive">Inactive Only</option>
+                </select>
+                <button onclick="openCreateStudentModal()" class="btn btn-primary btn-sm">
+                  <i class="fas fa-user-plus" style="margin-right: 4px;"></i> Add Student
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+            <div class="table-responsive">
+              <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Roll Number</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Student Name &amp; Email</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Department &amp; Year</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-students-table-body">
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;">Loading students...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 3: ORGANIZER MANAGER
+             =================================================================== -->
+        <div id="admin-view-organizers" style="display: none;">
+          <div class="card" style="padding: 1.5rem; border-radius: 14px; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <h3 style="font-size: 1.2rem; color: #1e1b4b; margin: 0;">Faculty &amp; Student Affairs Organizers</h3>
+              <button onclick="openCreateOrganizerModal()" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus" style="margin-right: 4px;"></i> Add Organizer
+              </button>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+            <div class="table-responsive">
+              <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Organizer Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Designation / Dept</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">KCT Email</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Status</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-organizers-table-body">
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;">Loading organizers...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 4: ATTENDANCE CORRECTIONS (MANDATORY REASON)
+             =================================================================== -->
+        <div id="admin-view-attendance" style="display: none;">
+          <div class="card" style="padding: 1.25rem 1.5rem; border-radius: 14px; margin-bottom: 1.5rem; background: #fffbeb; border: 1px solid #fde68a;">
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <i class="fas fa-triangle-exclamation" style="color: #d97706; font-size: 1.25rem;"></i>
+              <div>
+                <strong style="color: #92400e;">Administrative Attendance Correction Policy</strong>
+                <p style="color: #b45309; font-size: 0.82rem; margin: 2px 0 0 0;">
+                  Any manual override or status change requires a mandatory justification reason and is immutably logged into the audit trail.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+            <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 1.15rem; color: #1e1b4b; margin: 0;">Verified Attendance Records Across All Events</h3>
+              <button onclick="loadAdminAttendance()" class="btn btn-outline btn-sm">Refresh Records</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Event Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Student Name</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Roll Number</th>
+                    <th style="padding: 0.85rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Status</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Check-in Time</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Administrative Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-attendance-table-body">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: #64748b;">Loading attendance records...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 5: AUDIT LOGS VIEWER
+             =================================================================== -->
+        <div id="admin-view-audit-logs" style="display: none;">
+          <div class="card" style="padding: 1.5rem; border-radius: 14px; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 style="font-size: 1.2rem; color: #1e1b4b; margin-bottom: 0.2rem;">Centralized System Audit Trail</h3>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0;">Chronological, tamper-evident log of all sensitive administrative actions</p>
+              </div>
+              <div style="display: flex; gap: 0.75rem;">
+                <select id="audit-action-filter" class="form-control" style="width: 220px;" onchange="loadAdminAuditLogs()">
+                  <option value="all">All Actions</option>
+                  <option value="ROLL_NUMBER_CHANGED">Roll Number Modified</option>
+                  <option value="ATTENDANCE_CORRECTED">Attendance Corrected</option>
+                  <option value="EVENT_APPROVED">Event Approved</option>
+                  <option value="EVENT_REJECTED">Event Rejected</option>
+                  <option value="STUDENT_STATUS_TOGGLED">Student Status Toggled</option>
+                  <option value="ATTENDANCE_MARKED">Attendance Marked</option>
+                </select>
+                <button onclick="loadAdminAuditLogs()" class="btn btn-outline btn-sm">Refresh Logs</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+            <div class="table-responsive">
+              <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Timestamp</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Action</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Actor</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Target</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Reason / Audit Details</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-audit-table-body">
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;">Loading audit logs...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             VIEW 6: EMAIL DELIVERY LOGS
+             =================================================================== -->
+        <div id="admin-view-emails" style="display: none;">
+          <div class="card" style="padding: 1.25rem 1.5rem; border-radius: 14px; margin-bottom: 1.5rem; background: #f5f3ff; border: 1px solid #ddd6fe;">
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <i class="fas fa-paper-plane" style="color: #7c3aed; font-size: 1.25rem;"></i>
+              <div>
+                <strong style="color: #5b21b6;">Automated Notification &amp; Pass Delivery Engine</strong>
+                <p style="color: #6d28d9; font-size: 0.82rem; margin: 2px 0 0 0;">
+                  Live log of QR code entry passes, proposal evaluations, and attendance confirmation emails dispatched to students and faculty.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+            <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 1.15rem; color: #1e1b4b; margin: 0;">Dispatched Email Logs</h3>
+              <button onclick="loadAdminEmails()" class="btn btn-outline btn-sm">Refresh Email Log</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                    <th style="padding: 0.85rem 1.25rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Timestamp</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Email Type</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Recipient</th>
+                    <th style="padding: 0.85rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Subject / Event</th>
+                    <th style="padding: 0.85rem 1.25rem; text-align: right; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-emails-table-body">
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;">Loading email logs...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: ADD / EDIT STUDENT -->
+  <div class="modal-backdrop" id="student-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 520px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 id="student-modal-title" style="color: #1e1b4b; font-size: 1.3rem;">Add Student</h3>
+        <button onclick="closeStudentModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <div id="student-modal-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+      <form id="student-modal-form">
+        <input type="hidden" id="modal-student-id">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="stu-name">Student Full Name <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="stu-name" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="stu-roll">College Roll Number <span style="color: #ef4444;">*</span></label>
+            <input type="text" id="stu-roll" class="form-control" placeholder="21BCS042" style="font-family: monospace; text-transform: uppercase;" required>
+            <small style="font-size: 0.72rem; color: #64748b;">Must be unique across KCT</small>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stu-email">KCT Email <span style="color: #ef4444;">*</span></label>
+            <input type="email" id="stu-email" class="form-control" placeholder="name@kct.ac.in" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="stu-dept">Department</label>
+            <input type="text" id="stu-dept" class="form-control" value="Computer Science and Engineering" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stu-year">Year</label>
+            <input type="text" id="stu-year" class="form-control" value="4th Year" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="stu-phone">Mobile Phone</label>
+            <input type="tel" id="stu-phone" class="form-control" placeholder="9876543210">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="stu-password">Password (Optional)</label>
+            <input type="password" id="stu-password" class="form-control" placeholder="Default: student@kct2026">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeStudentModal()">Cancel</button>
+          <button type="submit" id="btn-save-student" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD / EDIT ORGANIZER -->
+  <div class="modal-backdrop" id="organizer-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 500px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 id="organizer-modal-title" style="color: #1e1b4b; font-size: 1.3rem;">Add Organizer</h3>
+        <button onclick="closeOrganizerModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <div id="organizer-modal-alert" style="display: none; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;"></div>
+
+      <form id="organizer-modal-form">
+        <input type="hidden" id="modal-org-id">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="org-name">Organizer / Faculty Name <span style="color: #ef4444;">*</span></label>
+          <input type="text" id="org-name" class="form-control" required>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="org-email">Email <span style="color: #ef4444;">*</span></label>
+          <input type="email" id="org-email" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="org-desig">Designation</label>
+            <input type="text" id="org-desig" class="form-control" value="Faculty Head - Events">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="org-password">Password (Optional)</label>
+            <input type="password" id="org-password" class="form-control" placeholder="Default: admin@kct2026">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeOrganizerModal()">Cancel</button>
+          <button type="submit" id="btn-save-organizer" class="btn btn-primary">Save Organizer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ATTENDANCE CORRECTION WITH MANDATORY REASON -->
+  <div class="modal-backdrop" id="correction-modal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div class="card" style="width: 100%; max-width: 520px; padding: 2rem; border-radius: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="color: #1e1b4b; font-size: 1.25rem;">
+          <i class="fas fa-file-pen" style="color: #6d28d9; margin-right: 6px;"></i> Administrative Attendance Correction
+        </h3>
+        <button onclick="closeCorrectionModal()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+        <div>Student: <strong id="corr-student-name">Hariharan</strong> (<span id="corr-roll-no">21BCS042</span>)</div>
+        <div>Current Status: <strong id="corr-current-status" style="color: #10b981;">Present</strong></div>
+      </div>
+
+      <form id="correction-form">
+        <input type="hidden" id="corr-reg-id">
+        <div class="form-group" style="margin-bottom: 1rem;">
+          <label class="form-label" for="corr-target-status">New Attendance Status</label>
+          <select id="corr-target-status" class="form-control" style="font-weight: 600;">
+            <option value="Absent">Mark as Absent (Remove Present status)</option>
+            <option value="Present">Mark as Present (Verified attendance)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label" for="corr-reason" style="font-weight: 600;">
+            Mandatory Justification Reason <span style="color: #ef4444;">* Required for Audit Log</span>
+          </label>
+          <textarea 
+            id="corr-reason" 
+            class="form-control" 
+            rows="3" 
+            placeholder="e.g. Student reported QR reader error at entrance gate; faculty supervisor confirmed physical presence." 
+            required
+          ></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCorrectionModal()">Cancel</button>
+          <button type="submit" id="btn-submit-correction" class="btn btn-primary">
+            Confirm &amp; Log to Audit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Scanner | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="assets/vendor/html5-qrcode.min.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Left Sidebar (Panel 6) -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fas fa-camera"></i>
+        </div>
+        <div>
+          <div class="sidebar-brand-text">EventHub</div>
+          <div class="sidebar-brand-subtitle">Attendance Scanner</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Operations</div>
+        <a class="sidebar-link" href="organizer-dashboard.html">
+          <span class="nav-icon"><i class="fas fa-chart-line"></i></span>
+          <span>Dashboard</span>
+        </a>
+        <a class="sidebar-link active" href="attendance.html">
+          <span class="nav-icon"><i class="fas fa-camera"></i></span>
+          <span>Attendance Scanner</span>
+        </a>
+        <a class="sidebar-link" href="event-approvals.html">
+          <span class="nav-icon"><i class="fas fa-stamp"></i></span>
+          <span>Event Approvals</span>
+        </a>
+        <a class="sidebar-link" href="participants.html">
+          <span class="nav-icon"><i class="fas fa-users"></i></span>
+          <span>Participants</span>
+        </a>
+        <a class="sidebar-link" href="events.html">
+          <span class="nav-icon"><i class="fas fa-calendar-days"></i></span>
+          <span>Events Catalog</span>
+        </a>
+
+        <div class="nav-section-title" id="admin-section-title" style="margin-top: 1rem; display: none;">Administration</div>
+        <a class="sidebar-link" href="admin-dashboard.html" id="link-admin-panel" style="display: none; background: rgba(109, 40, 217, 0.2); color: #c4b5fd;">
+          <span class="nav-icon"><i class="fas fa-user-shield"></i></span>
+          <span>Admin Console</span>
+        </a>
+        <div class="nav-section-title" style="margin-top: 1rem;">Session</div>
+        <a class="sidebar-link" onclick="logoutUser()" style="color: #fca5a5;">
+          <span class="nav-icon"><i class="fas fa-right-from-bracket"></i></span>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-avatar-circle" style="background: #5b21b6; border-color: #7c3aed;">
+          <i class="fas fa-id-badge"></i>
+        </div>
+        <div class="user-profile-meta">
+          <div class="user-profile-name" id="sidebar-scanner-user">EventHub Organizer</div>
+          <div class="user-profile-role">Desk Verification Gate</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-wrap">
+          <h1>Digital QR Attendance Verification</h1>
+          <p>Scan student passes or enter Roll Number for instant verified attendance recording</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <a href="participants.html" id="view-participants-link" class="btn btn-outline btn-sm">
+            <i class="fas fa-table" style="margin-right: 4px;"></i> View Participants
+          </a>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- Event Selector & Metrics Strip -->
+        <div class="card" style="padding: 1.5rem 1.75rem; margin-bottom: 2rem; border-radius: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
+            <div>
+              <span class="badge badge-category" style="margin-bottom: 0.35rem;">Active Event Desk</span>
+              <h2 style="font-size: 1.35rem; color: #1e1b4b; margin-bottom: 0.25rem;" id="current-event-name">Event Attendance</h2>
+              <p id="current-event-meta" style="font-size: 0.85rem; color: #64748b; margin-bottom: 0;">
+                Loading event session...
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <div style="min-width: 260px;">
+                <label for="attendance-event-select" style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 4px;">
+                  Active Event Desk:
+                </label>
+                <select id="attendance-event-select" class="form-control" style="font-weight: 600; padding: 0.6rem 0.85rem; border-color: #cbd5e1;">
+                  <option value="">Loading events...</option>
+                </select>
+              </div>
+
+              <div style="min-width: 220px;">
+                <label for="attendance-session-select" style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 4px;">
+                  Session / Track:
+                </label>
+                <select id="attendance-session-select" class="form-control" style="font-weight: 600; padding: 0.6rem 0.85rem; border-color: #cbd5e1; background: #f5f3ff;">
+                  <option value="">General Entrance / All Sessions</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Session Metrics -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid #f1f5f9;">
+            <div style="border-left: 3px solid #6d28d9; padding-left: 0.75rem;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Total Registered</div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #1e1b4b;" id="stat-registered-count">0</div>
+            </div>
+            <div style="border-left: 3px solid #10b981; padding-left: 0.75rem;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Verified Present</div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #10b981;" id="stat-present-count">0</div>
+            </div>
+            <div style="border-left: 3px solid #ef4444; padding-left: 0.75rem;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Absent / Pending</div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #ef4444;" id="stat-absent-count">0</div>
+            </div>
+            <div style="border-left: 3px solid #f59e0b; padding-left: 0.75rem;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; color: #64748b; font-weight: 700;">Attendance Rate</div>
+              <div style="font-size: 1.4rem; font-weight: 800; color: #6d28d9;" id="stat-attendance-rate">0.0%</div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div style="margin-top: 1rem; height: 6px; background: #fee2e2; border-radius: 3px; overflow: hidden;">
+            <div id="attendance-progress-bar" style="width: 0%; height: 100%; background: #10b981; transition: width 0.4s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Feedback Result Alert Banner (The Exact 5 Cases) -->
+        <div id="attendance-result-banner" style="display: none; margin-bottom: 2rem;">
+          <!-- Dynamically populated with exact messages -->
+        </div>
+
+        <!-- 2 Columns: Camera Viewport (Panel 6) + Manual Roll No Entry -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+          
+          <!-- Column 1: QR Camera Scanner with Corner Brackets -->
+          <div class="card" style="padding: 1.75rem; border-radius: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <div>
+                <h3 style="font-size: 1.15rem; color: #1e1b4b;">High-Speed QR Scanner</h3>
+                <p style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">Align camera to the student's digital pass QR</p>
+              </div>
+              <span class="badge" style="background: #f5f3ff; color: #6d28d9; border: 1px solid #c4b5fd;">Live Optical Scan</span>
+            </div>
+
+            <!-- Viewport with Corner Brackets -->
+            <div class="scanner-video-wrapper">
+              <div id="reader" style="width: 100%; height: 100%;"></div>
+              <div class="scanner-overlay">
+                <div class="scanner-target-box">
+                  <div class="scanner-bracket top-left"></div>
+                  <div class="scanner-bracket top-right"></div>
+                  <div class="scanner-bracket bottom-left"></div>
+                  <div class="scanner-bracket bottom-right"></div>
+                  <div class="scanner-laser"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Scanner Controls -->
+            <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+              <button id="btn-start-camera" class="btn btn-primary btn-sm">
+                <i class="fas fa-camera" style="margin-right: 4px;"></i> Start Camera Scanner
+              </button>
+              <button id="btn-stop-camera" class="btn btn-danger btn-sm" style="display: none;">
+                <i class="fas fa-stop" style="margin-right: 4px;"></i> Stop Camera
+              </button>
+              <label class="btn btn-outline btn-sm" style="cursor: pointer; margin-bottom: 0;">
+                <i class="fas fa-image" style="margin-right: 4px;"></i> Upload QR Image
+                <input type="file" id="qr-file-input" accept="image/*" style="display: none;">
+              </label>
+            </div>
+          </div>
+
+          <!-- Column 2: Manual Roll Number / Registration Entry -->
+          <div class="card" style="padding: 1.75rem; border-radius: 14px; display: flex; flex-direction: column;">
+            <div style="margin-bottom: 1.25rem;">
+              <h3 style="font-size: 1.15rem; color: #1e1b4b;">Manual Roll No. / Pass ID Entry</h3>
+              <p style="font-size: 0.82rem; color: #64748b; margin-top: 2px;">
+                Enter College Roll Number (e.g. 21BCS042) or Registration ID (e.g. EVT-2026-0001)
+              </p>
+            </div>
+
+            <form id="manual-attendance-form" style="margin-bottom: 1.5rem;">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <label class="form-label" for="manual-reg-id" style="font-weight: 600;">
+                  Student Roll Number or Pass ID
+                </label>
+                <div style="display: flex; gap: 0.5rem;">
+                  <input 
+                    type="text" 
+                    id="manual-reg-id" 
+                    class="form-control" 
+                    placeholder="e.g. 21BCS042 or EVT-2026-0001" 
+                    style="font-family: monospace; font-size: 1.05rem; font-weight: bold; text-transform: uppercase;" 
+                    required
+                  >
+                  <button type="submit" id="btn-manual-submit" class="btn btn-primary" style="white-space: nowrap;">
+                    <i class="fas fa-check" style="margin-right: 4px;"></i> Mark
+                  </button>
+                </div>
+                <small style="color: #64748b; font-size: 0.75rem; margin-top: 4px; display: block;">
+                  Direct Roll Number lookup supported. Real-time verification against event roster.
+                </small>
+              </div>
+            </form>
+
+            <!-- Quick Test Helper Scenarios for Faculty Demo -->
+            <div style="margin-top: auto; padding: 1.25rem; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+              <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #475569; margin-bottom: 0.6rem;">
+                <i class="fas fa-bolt" style="color: #6d28d9;"></i> Quick Test Scenarios (Click to test):
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem;">
+                <button type="button" onclick="document.getElementById('manual-reg-id').value='21BCS042'" class="btn btn-outline btn-sm" style="background: white; justify-content: flex-start; text-align: left;">
+                  <span class="badge badge-present" style="font-size: 0.7rem; margin-right: 6px;">Case 1</span> 
+                  <strong>21BCS042</strong> &ndash; Valid Unmarked Roll No (Hariharan)
+                </button>
+                <button type="button" onclick="document.getElementById('manual-reg-id').value='21BCS043'" class="btn btn-outline btn-sm" style="background: white; justify-content: flex-start; text-align: left;">
+                  <span class="badge badge-warning" style="font-size: 0.7rem; margin-right: 6px;">Case 2</span> 
+                  <strong>21BCS043</strong> &ndash; Already Marked (Shaheer)
+                </button>
+                <button type="button" onclick="document.getElementById('manual-reg-id').value='21BCS999'" class="btn btn-outline btn-sm" style="background: white; justify-content: flex-start; text-align: left;">
+                  <span class="badge badge-absent" style="font-size: 0.7rem; margin-right: 6px;">Case 3</span> 
+                  <strong>21BCS999</strong> &ndash; Non-existent Registration Not Found
+                </button>
+                <button type="button" onclick="document.getElementById('manual-reg-id').value='EVT-2026-0099'" class="btn btn-outline btn-sm" style="background: white; justify-content: flex-start; text-align: left;">
+                  <span class="badge badge-category" style="font-size: 0.7rem; margin-right: 6px;">Case 4</span> 
+                  <strong>EVT-2026-0099</strong> &ndash; Pass Registered for Another Event
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Real-Time Verified Attendees Session Table -->
+        <div class="card" style="padding: 0; overflow: hidden; border-radius: 14px;">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <h3 style="font-size: 1.15rem; color: #1e1b4b; margin-bottom: 0.2rem;">Verified Attendees Live Stream</h3>
+              <p style="font-size: 0.82rem; color: #64748b; margin-bottom: 0;">Verified check-ins recorded for this event session</p>
+            </div>
+            <button onclick="loadEventAttendance()" class="btn btn-outline btn-sm">
+              <i class="fas fa-rotate"></i> Refresh Feed
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                  <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">#</th>
+                  <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Student Name</th>
+                  <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">College Roll No</th>
+                  <th style="padding: 0.75rem 1rem; text-align: center; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Status</th>
+                  <th style="padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: #64748b;">Verified Timestamp</th>
+                </tr>
+              </thead>
+              <tbody id="recent-checkins-body">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 2rem; color: #64748b;">
+                    Loading recent check-in records...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/attendance.js"></script>
+</body>
+</html>

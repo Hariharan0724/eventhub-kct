@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration | EventHub - KCT Coimbatore</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <div class="brand-meta">
+          <span class="brand-title">EventHub</span>
+          <span class="brand-subtitle">Kumaraguru College of Technology</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="events.html" class="nav-link">Upcoming Events</a></li>
+        <li><a href="student-dashboard.html" class="nav-link">My Dashboard</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Injected via auth.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Registration Section -->
+  <main class="section">
+    <div class="container" style="max-width: 720px;">
+      
+      <!-- Page Header -->
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="badge badge-category" style="margin-bottom: 0.5rem;">KCT Student Portal</span>
+        <h1 id="reg-page-title">Event Registration</h1>
+        <p style="font-size: 1.05rem; color: var(--text-muted);" id="reg-page-subtitle">
+          Reserve your seat for upcoming campus events and instantly generate your digital QR entry pass.
+        </p>
+      </div>
+
+      <!-- Navigation Tabs (Event Registration vs Create Account) -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-muted); padding: 0.4rem; border-radius: var(--radius-md);">
+        <button type="button" class="btn btn-sm tab-btn active" id="tab-btn-event-reg" style="flex: 1; text-align: center;">
+          🎟️ Register for Event
+        </button>
+        <button type="button" class="btn btn-sm btn-outline tab-btn" id="tab-btn-account-reg" style="flex: 1; text-align: center;">
+          👤 Create Student Account
+        </button>
+      </div>
+
+      <!-- Alert / Duplicate Warning Box -->
+      <div id="form-alert" style="display: none;"></div>
+
+      <!-- TAB 1: EVENT REGISTRATION FORM -->
+      <div class="card" id="card-event-reg" style="padding: 2.25rem;">
+        <!-- Auth status prompt if not logged in -->
+        <div id="auth-reminder-banner" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-md); padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+          <div style="font-weight: 700; color: #92400e; margin-bottom: 0.25rem;">Authentication Required</div>
+          <p style="font-size: 0.9rem; color: #78350f; margin-bottom: 0.75rem;">
+            You need a logged-in student account to register for events and receive your personalized QR attendance pass.
+          </p>
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="login.html?role=student" class="btn btn-primary btn-sm">Log In Now &rarr;</a>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-switch-to-signup">Create New Account</button>
+          </div>
+        </div>
+
+        <form id="student-reg-form">
+          <!-- Select Event -->
+          <div class="form-group">
+            <label class="form-label" for="reg-event-select">
+              Select Event <span class="required">*</span>
+            </label>
+            <select id="reg-event-select" class="form-control" required>
+              <option value="">Loading events...</option>
+            </select>
+            <!-- Selected Event Dynamic Snippet -->
+            <div id="selected-event-info" style="display: none;"></div>
+          </div>
+
+          <div class="form-row">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label class="form-label" for="student-name">
+                Full Name <span class="required">*</span>
+              </label>
+              <input type="text" id="student-name" class="form-control" placeholder="e.g. Hariharan S" required>
+            </div>
+
+            <!-- KCT Email -->
+            <div class="form-group">
+              <label class="form-label" for="student-email">
+                KCT Email ID <span class="required">*</span>
+              </label>
+              <input type="email" id="student-email" class="form-control" placeholder="e.g. hariharan@kct.ac.in" required>
+              <span class="form-text">Your institutional email</span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Register Number -->
+            <div class="form-group">
+              <label class="form-label" for="register-number">
+                Register Number <span class="required">*</span>
+              </label>
+              <input type="text" id="register-number" class="form-control" placeholder="e.g. 21BCS042" required style="text-transform: uppercase;">
+              <span class="form-text">Official KCT roll number</span>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+              <label class="form-label" for="phone-number">
+                Mobile Number <span class="required">*</span>
+              </label>
+              <input type="tel" id="phone-number" class="form-control" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Department Dropdown -->
+            <div class="form-group">
+              <label class="form-label" for="department">
+                Department <span class="required">*</span>
+              </label>
+              <select id="department" class="form-control" required>
+                <option value="">-- Choose Department --</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+                <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science</option>
+                <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+                <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+                <option value="Biotechnology">Biotechnology</option>
+                <option value="Fashion Technology">Fashion Technology</option>
+              </select>
+            </div>
+
+            <!-- Year Dropdown -->
+            <div class="form-group">
+              <label class="form-label" for="year">
+                Year of Study <span class="required">*</span>
+              </label>
+              <select id="year" class="form-control" required>
+                <option value="">-- Choose Year --</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+                <option value="PG / Masters">PG / Masters</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Note on Attendance Check-in -->
+          <div style="background: var(--bg-muted); border-radius: var(--radius-md); padding: 1rem; margin: 1.25rem 0; font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: flex-start; gap: 0.5rem;">
+            <span style="font-size: 1.1rem; flex-shrink: 0;">ℹ️</span>
+            <span>
+              By registering, an official <strong>Digital Registration ID &amp; QR Pass</strong> will be generated. You must present this QR code at the event entrance to mark your attendance.
+            </span>
+          </div>
+
+          <button type="submit" id="btn-submit-event-reg" class="btn btn-primary btn-lg btn-block">
+            Complete Registration &amp; Get QR Pass &rarr;
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 2: STUDENT ACCOUNT SIGN UP FORM -->
+      <div class="card" id="card-account-reg" style="padding: 2.25rem; display: none;">
+        <form id="student-signup-form">
+          <div class="form-row">
+            <!-- Full Name -->
+            <div class="form-group">
+              <label class="form-label" for="signup-name">Full Name <span class="required">*</span></label>
+              <input type="text" id="signup-name" class="form-control" placeholder="e.g. Hariharan S" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="signup-email">KCT Email ID <span class="required">*</span></label>
+              <input type="email" id="signup-email" class="form-control" placeholder="e.g. hariharan@kct.ac.in" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Password -->
+            <div class="form-group">
+              <label class="form-label" for="signup-password">Account Password <span class="required">*</span></label>
+              <input type="password" id="signup-password" class="form-control" placeholder="At least 6 characters" minlength="6" required>
+            </div>
+
+            <!-- Register Number -->
+            <div class="form-group">
+              <label class="form-label" for="signup-regno">Register Number <span class="required">*</span></label>
+              <input type="text" id="signup-regno" class="form-control" placeholder="e.g. 21BCS042" required style="text-transform: uppercase;">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Mobile -->
+            <div class="form-group">
+              <label class="form-label" for="signup-phone">Mobile Number <span class="required">*</span></label>
+              <input type="tel" id="signup-phone" class="form-control" placeholder="10-digit mobile" pattern="[0-9]{10}" required>
+            </div>
+
+            <!-- Year -->
+            <div class="form-group">
+              <label class="form-label" for="signup-year">Year of Study <span class="required">*</span></label>
+              <select id="signup-year" class="form-control" required>
+                <option value="">-- Choose Year --</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+                <option value="PG / Masters">PG / Masters</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signup-dept">Department <span class="required">*</span></label>
+            <select id="signup-dept" class="form-control" required>
+              <option value="">-- Choose Department --</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Computer Science and Engineering">Computer Science and Engineering</option>
+              <option value="Artificial Intelligence and Data Science">Artificial Intelligence and Data Science</option>
+              <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Electrical and Electronics Engineering">Electrical and Electronics Engineering</option>
+              <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+              <option value="Biotechnology">Biotechnology</option>
+              <option value="Fashion Technology">Fashion Technology</option>
+            </select>
+          </div>
+
+          <button type="submit" id="btn-submit-signup" class="btn btn-primary btn-lg btn-block" style="margin-top: 1rem;">
+            Create Student Account &amp; Proceed &rarr;
+          </button>
+
+          <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+            Already have an account? <a href="login.html?role=student" style="color: var(--primary); font-weight: 600;">Log in here</a>
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <strong style="color: var(--secondary); font-size: 1rem;">EventHub &bull; KCT</strong>
+        <p style="margin-top: 0.25rem;">Kumaraguru College of Technology, Coimbatore</p>
+      </div>
+      <div>
+        <p>Digital Event Attendance Management System</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/registration.js"></script>
+</body>
+</html>
