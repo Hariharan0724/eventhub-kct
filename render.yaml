@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: eventhub-kct
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        value: kct_super_secret_jwt_key_2026
